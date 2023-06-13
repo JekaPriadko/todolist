@@ -34,8 +34,21 @@
     padding: 10px;
     font-size: 16px;
     line-height: 20px;
-    &:hover{
+    &:hover {
       background: rgba(var(--color-primary), 0.8);
     }
+  }
+
+  &--icon {
+    .button__prepend-icon,
+    .button__append-icon {
+      margin: 0;
+    }
+  }
+  &--big-icon{
+      .button__icon {
+    width: 24px;
+    height: 24px;
+  }
   }
 }
