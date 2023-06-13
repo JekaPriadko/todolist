@@ -1,0 +1,129 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  flex-shrink: 0;
+  background: rgb(var(--color-left-sidebar-bg));
+  border-right: 2px solid rgba(var(--color-border), 0.1);
+  padding: 14px 0;
+  color: rgba(var(--color-text-primary), 0.4);
+
+  .sidebar__section {
+    padding: 0;
+  }
+
+  .sidebar__filter {
+    &-list {
+    }
+    &-item {
+      padding: 0 8px;
+      height: 40px;
+    }
+    &-button {
+      width: 100%;
+      padding: 0 8px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-radius: 4px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      color: rgba(var(--color-text-primary), 0.5);
+
+      &:hover {
+        background: rgba(var(--color-border), 0.1);
+      }
+
+      &.active {
+        background: rgba(var(--color-border), 0.2);
+      }
+    }
+    &-icon {
+      margin-right: 4px;
+      width: 20px;
+      height: 20px;
+    }
+    &-name {
+      margin-right: 12px;
+    }
+    &-count {
+      margin-left: auto;
+    }
+  }
+  .sidebar__lists {
+    &-header {
+      padding: 0 8px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-radius: 4px;
+      cursor: pointer;
+      color: rgba(var(--color-text-primary), 0.5);
+      margin-bottom: 4px;
+    }
+
+    &-title {
+      margin-right: 12px;
+    }
+
+    &-add {
+      margin-left: auto;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      &:hover {
+        background: rgba(var(--color-border), 0.1);
+      }
+    }
+
+    &-add-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &-list {
+    }
+
+    &-item {
+      padding: 0 8px;
+      height: 40px;
+    }
+
+    &-button {
+      width: 100%;
+      padding: 0 8px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-radius: 4px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      color: rgba(var(--color-text-primary), 0.5);
+
+      &:hover {
+        background: rgba(var(--color-border), 0.1);
+      }
+
+      &.active {
+        background: rgba(var(--color-border), 0.2);
+      }
+    }
+    &-icon {
+      margin-right: 4px;
+      width: 20px;
+      height: 20px;
+    }
+    &-name {
+      margin-right: 12px;
+    }
+    &-count {
+      margin-left: auto;
+    }
+  }
+}

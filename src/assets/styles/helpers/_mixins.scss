@@ -1,0 +1,37 @@
+/* =============================
+			Миксин для шрифтов
+============================= */
+
+@mixin font-face($font-family, $file-path, $weight: normal, $style: normal) {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+    src: local("#{$font-family}"),
+      url("#{$file-path}.woff") format("woff"),
+      url("#{$file-path}.woff2") format("woff2")
+  }
+}
+
+/* =============================
+		Миксин для медиазапросов
+============================= */
+
+@mixin media-up($width) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin media-down($width) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin media-between($width-down, $width-up) {
+  @media screen and (min-width: $width-down) and (max-width: $width-up) {
+    @content;
+  }
+}

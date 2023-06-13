@@ -1,0 +1,26 @@
+// $path-sprite: "/wp-content/themes/gwt/assets/img/svg/sprite.svg";
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+
+:root {
+}
+
+.dark {
+  --color-main-bg: 30, 30, 30;
+  --color-left-navbar-bg: 0, 0, 0;
+  --color-left-sidebar-bg: 25, 25, 25;
+
+  --color-text-primary: 255, 255, 255;
+
+  --color-primary: 71,114,250;
+
+  --color-border: 255, 255, 255;
+  --color-dark: 255, 255, 255;
+
+}
+
+.light {
+}

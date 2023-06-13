@@ -1,0 +1,4 @@
+// При сборке все шрифты попадают в одну папку fonts
+@include font-face('Inter', '/src/assets/fonts/Inter-Regular', 400);
+@include font-face('Inter', '/src/assets/fonts/Inter-Medium', 500);
+@include font-face('Inter', '/src/assets/fonts/Inter-Bold', 700);

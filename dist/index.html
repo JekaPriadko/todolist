@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>TODO List</title>
+  <script type="module" crossorigin src="/assets/index-1a69eec4.js"></script>
+  <link rel="stylesheet" href="/assets/index-8297c56d.css">
+</head>
+
+<body id="body" class="dark">
+  <div class="root">
+
+    <div class="navbar">
+      <div class="user">
+        <div class="user__icon"></div>
+      </div>
+      <nav class="menu">
+        <ul>
+          <!-- <li>
+            <svg class="icon">
+              <use xlink:href="sprite.svg#list-sidebar"></use>
+            </svg>
+          </li> -->
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="/src/images/sprite.svg#logo"></use>
+            </svg>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar"></div>
+    <div class="content">
+      <div class="main"></div>
+      <div class="details"></div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    const body = document.getElementById("body");
+
+    var params = window
+      .location
+      .search
+      .replace('?', '')
+      .split('&')
+      .reduce(
+        function (p, e) {
+          var a = e.split('=');
+          p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+          return p;
+        },
+        {}
+      );
+
+    body.classList.remove("light")
+    body.classList.remove("dark")
+    params.color = params.color ?? 'dark'
+    body.classList.add(params.color)
+
+  </script>
+</body>
+
+</html>
