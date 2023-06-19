@@ -1,18 +1,9 @@
 import './assets/styles/index.scss';
 
-// interface User {
-//   name: string;
-//   id: number;
-// }
+import removeMainPreloader from './assets/ts/loader';
+import DraggerLayout from './assets/ts/dragger';
 
-// const user: User = {
-//   name: 'Hayes',
-//   id: 0,
-// };
-
-const mainPreloader = document.getElementById('main-preloader');
-const root = document.getElementById('root');
-setTimeout(() => {
-  mainPreloader.classList.add('hide');
-  root.style.display = 'flex';
-}, 1000);
+document.addEventListener('DOMContentLoaded', (event) => {
+  removeMainPreloader();
+  new DraggerLayout();
+});

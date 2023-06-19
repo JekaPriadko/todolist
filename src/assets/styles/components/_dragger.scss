@@ -1,0 +1,19 @@
+.dragger {
+  width: 3px;
+  height: 100vh;
+  background: rgb(var(--color-primary));
+  position: absolute;
+  top: 0;
+  cursor: col-resize;
+  opacity: 0;
+  transition: all 0.35s ease;
+  &:hover {
+    opacity: 0.8;
+  }
+  &--sidebar {
+    right: -1.5px;
+  }
+  &--details {
+    left: -1.5px;
+  }
+}
