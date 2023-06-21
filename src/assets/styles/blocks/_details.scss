@@ -3,6 +3,10 @@
   height: 100vh;
   position: relative;
   flex-shrink: 0;
+  display: none;
+  @include media-up(960px) {
+    display: block;
+  }
   .details__main {
     display: flex;
     flex-direction: column;

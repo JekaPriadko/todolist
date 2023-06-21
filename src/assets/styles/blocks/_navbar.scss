@@ -3,4 +3,10 @@
   height: 100vh;
   flex-shrink: 0;
   background: rgb(var(--color-left-navbar-bg));
+  display: none;
+  z-index: 3;
+
+  @include media-up(480px) {
+    display: block;
+  }
 }

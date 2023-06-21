@@ -11,8 +11,7 @@ class DraggerLayout {
 
   private readonly minW: number;
   private readonly maxWSidebar: number;
-  private readonly maxWDetails: number;
-  private readonly minWContent: number;
+  private minWContent: number;
 
   constructor() {
     this.content = document.getElementById('main');
@@ -25,10 +24,8 @@ class DraggerLayout {
     this.isResizingDetails = false;
     this.lastDownX = 0;
 
-    this.minW = 250;
+    this.minW = 260;
     this.maxWSidebar = 450;
-    this.maxWDetails = 600;
-    this.minWContent = 550;
 
     if (this.sidebar && this.sidebarDragger) {
       this.sidebarDragger.addEventListener('mousedown', (e) =>
@@ -43,6 +40,9 @@ class DraggerLayout {
     }
     document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
     document.addEventListener('mouseup', () => this.handleMouseUp());
+
+    this.handleMinWidthContent();
+    window.addEventListener('resize', () => this.handleMinWidthContent());
   }
 
   private handleMouseDown(block: 'sidebar' | 'details', e: MouseEvent) {
@@ -80,6 +80,8 @@ class DraggerLayout {
       return;
     }
 
+    console.log('new:' + newSidebarWidth);
+    console.log('min:' + this.minW);
     if (newSidebarWidth > this.minW && newSidebarWidth < this.maxWSidebar) {
       this.sidebar.style.width = `${newSidebarWidth}px`;
     }
@@ -99,11 +101,17 @@ class DraggerLayout {
       return;
     }
 
-    if (newDetailsWidth > this.minW && newDetailsWidth < this.maxWDetails) {
+    if (newDetailsWidth > this.minW) {
       this.details.style.width = `${newDetailsWidth}px`;
     }
 
     this.lastDownX = e.clientX;
+  }
+
+  private handleMinWidthContent() {
+    this.minWContent = Math.round(window.innerWidth * 0.4);
+    this.sidebar.style.width = '';
+    this.details.style.width = '';
   }
 }
 

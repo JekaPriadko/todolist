@@ -8,6 +8,6 @@ import Sidebar from './assets/ts/sidebar';
 document.addEventListener('DOMContentLoaded', (event) => {
   preloader();
   accordion();
-  new DraggerLayout();
   new Sidebar();
+  new DraggerLayout();
 });
