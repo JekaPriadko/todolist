@@ -1,11 +1,13 @@
 import './assets/styles/index.scss';
 
-import removeMainPreloader from './assets/ts/loader';
+import preloader from './assets/ts/loader';
+import accordion from './assets/ts/accordion';
 import DraggerLayout from './assets/ts/dragger';
 import Sidebar from './assets/ts/sidebar';
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  removeMainPreloader();
+  preloader();
+  accordion();
   new DraggerLayout();
   new Sidebar();
 });

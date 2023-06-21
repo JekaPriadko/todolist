@@ -8,6 +8,7 @@
   color: rgba(var(--color-text-primary), 0.4);
   position: relative;
   flex-shrink: 0;
+  overflow-y: auto;
   .sidebar__section {
     padding: 0;
   }
