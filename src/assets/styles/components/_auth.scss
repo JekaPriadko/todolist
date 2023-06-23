@@ -1,0 +1,100 @@
+.auth {
+  &.signin {
+    .auth__signin {
+      display: block;
+    }
+  }
+
+  &.signup {
+    .auth__signup {
+      display: block;
+    }
+  }
+
+  .auth__wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(var(--color-main-bg));
+    z-index: 100;
+  }
+
+  .auth__content {
+    width: 100%;
+    max-width: 400px;
+    background: grey;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    border: 2px solid rgba(var(--color-border), 0.1);
+    background: rgb(var(--color-left-sidebar-bg));
+  }
+
+  .auth__signin {
+    display: none;
+  }
+  .auth__signup {
+    display: none;
+  }
+  .auth__form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+  }
+  .auth__input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(var(--color-border), 0.1);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 16px;
+    transition: all 0.35s ease;
+    &:hover {
+      border: 1px solid rgba(var(--color-border), 0.2);
+    }
+    &:focus,
+    &:active {
+      border: 1px solid rgba(var(--color-border), 0.3);
+    }
+  }
+
+  .auth__submit {
+    padding: 8px 12px;
+    text-align: center;
+    background: rgb(var(--color-primary));
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    color: rgba(var(--color-text-primary), 0.8);
+
+    &:hover {
+      background: rgba(var(--color-primary), 0.8);
+      color: rgba(var(--color-text-primary), 1);
+    }
+  }
+  .auth__toggle {
+    margin-top: 24px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    color: rgba(var(--color-text-primary), 0.4);
+    transition: all 0.35s ease;
+
+    &:hover {
+      color: rgba(var(--color-text-primary), 0.6);
+    }
+  }
+}

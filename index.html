@@ -5,10 +5,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
-  <title>TODO List</title>
+  <title>ToDoList</title>
 </head>
 
 <body id="body" class="dark">
+
   <div class="preloader" id="main-preloader">
     <div class="preloader__loader"></div>
   </div>
@@ -34,97 +35,97 @@
     </div>
 
     <div class="sidebar active" id="sidebar">
-        <div class="sidebar__filter sidebar__section">
-          <ul class="sidebar__filter-list">
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button active" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-inbox-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Inbox</span>
-                <span class="sidebar__filter-count">3</span>
-              </button>
-            </li>
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-today-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Today</span>
-                <span class="sidebar__filter-count">3</span>
-              </button>
-            </li>
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-tomorrow-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Tomorrow</span>
-                <span class="sidebar__filter-count">3</span>
-              </button>
-            </li>
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-today-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Next week</span>
-                <span class="sidebar__filter-count">3</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <!--  -->
-        <div class="divider"></div>
-        <!--  -->
-        <div class="sidebar__lists sidebar__section">
-          <div class="sidebar__lists-header">
-            <p class="sidebar__lists-title">Lists</p>
-            <button type="button" class="sidebar__lists-add">
-              <svg class="icon sidebar__lists-add-icon" aria-hidden="true">
-                <use xlink:href="/src/assets/images/sprite.svg#list-add"></use>
+      <div class="sidebar__filter sidebar__section">
+        <ul class="sidebar__filter-list">
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button active" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-inbox-list"></use>
               </svg>
+              <span class="sidebar__filter-name">Inbox</span>
+              <span class="sidebar__filter-count">3</span>
             </button>
-          </div>
-
-          <ul class="sidebar__lists-list">
-            <li class="sidebar__lists-item">
-              <button class="sidebar__lists-button" type="button">
-                <svg class="icon sidebar__lists-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-inbox-list"></use>
-                </svg>
-                <span class="sidebar__lists-name">Inbox</span>
-                <span class="sidebar__lists-color"></span>
-                <span class="sidebar__lists-count">3</span>
-              </button>
-            </li>
-          </ul>
-
+          </li>
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-today-list"></use>
+              </svg>
+              <span class="sidebar__filter-name">Today</span>
+              <span class="sidebar__filter-count">3</span>
+            </button>
+          </li>
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-tomorrow-list"></use>
+              </svg>
+              <span class="sidebar__filter-name">Tomorrow</span>
+              <span class="sidebar__filter-count">3</span>
+            </button>
+          </li>
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-today-list"></use>
+              </svg>
+              <span class="sidebar__filter-name">Next week</span>
+              <span class="sidebar__filter-count">3</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <!--  -->
+      <div class="divider"></div>
+      <!--  -->
+      <div class="sidebar__lists sidebar__section">
+        <div class="sidebar__lists-header">
+          <p class="sidebar__lists-title">Lists</p>
+          <button type="button" class="sidebar__lists-add">
+            <svg class="icon sidebar__lists-add-icon" aria-hidden="true">
+              <use xlink:href="/src/assets/images/sprite.svg#list-add"></use>
+            </svg>
+          </button>
         </div>
-        <!--  -->
-        <div class="divider"></div>
-        <!--  -->
-        <div class="sidebar__filter sidebar__section">
-          <ul class="sidebar__filter-list">
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-completed-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Completed</span>
-              </button>
-            </li>
-            <li class="sidebar__filter-item">
-              <button class="sidebar__filter-button" type="button">
-                <svg class="icon sidebar__filter-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#sidebar-delete-list"></use>
-                </svg>
-                <span class="sidebar__filter-name">Trash</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div class="sidebar__dragger dragger dragger--sidebar" id="dragger-sidebar"></div>
+
+        <ul class="sidebar__lists-list">
+          <li class="sidebar__lists-item">
+            <button class="sidebar__lists-button" type="button">
+              <svg class="icon sidebar__lists-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-inbox-list"></use>
+              </svg>
+              <span class="sidebar__lists-name">Inbox</span>
+              <span class="sidebar__lists-color"></span>
+              <span class="sidebar__lists-count">3</span>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+      <!--  -->
+      <div class="divider"></div>
+      <!--  -->
+      <div class="sidebar__filter sidebar__section">
+        <ul class="sidebar__filter-list">
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-completed-list"></use>
+              </svg>
+              <span class="sidebar__filter-name">Completed</span>
+            </button>
+          </li>
+          <li class="sidebar__filter-item">
+            <button class="sidebar__filter-button" type="button">
+              <svg class="icon sidebar__filter-icon" aria-hidden="true">
+                <use xlink:href="/src/assets/images/sprite.svg#sidebar-delete-list"></use>
+              </svg>
+              <span class="sidebar__filter-name">Trash</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar__dragger dragger dragger--sidebar" id="dragger-sidebar"></div>
     </div>
 
     <div class="main" id="main">
@@ -361,6 +362,7 @@
       <div class="dragger dragger--details" id="dragger-details"></div>
     </div>
   </div>
+
   <div class="layout" id="layout"></div>
   <script src="/src/index.ts" type="module"></script>
 

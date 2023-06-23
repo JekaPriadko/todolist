@@ -80,8 +80,6 @@ class DraggerLayout {
       return;
     }
 
-    console.log('new:' + newSidebarWidth);
-    console.log('min:' + this.minW);
     if (newSidebarWidth > this.minW && newSidebarWidth < this.maxWSidebar) {
       this.sidebar.style.width = `${newSidebarWidth}px`;
     }
