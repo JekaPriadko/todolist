@@ -7,6 +7,9 @@
   z-index: 3;
 
   @include media-up(480px) {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
   }
 }

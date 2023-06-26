@@ -33,13 +33,19 @@
     margin: 16px;
     border: 2px solid rgba(var(--color-border), 0.1);
     background: rgb(var(--color-left-sidebar-bg));
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
   }
 
   .auth__signin {
     display: none;
+    width: 100%;
   }
   .auth__signup {
     display: none;
+    width: 100%;
   }
   .auth__form {
     display: flex;
@@ -86,9 +92,8 @@
     }
   }
   .auth__toggle {
-    margin-top: 24px;
+    margin: 24px auto 0;
     text-align: center;
-    width: 100%;
     cursor: pointer;
     color: rgba(var(--color-text-primary), 0.4);
     transition: all 0.35s ease;
@@ -96,5 +101,10 @@
     &:hover {
       color: rgba(var(--color-text-primary), 0.6);
     }
+  }
+
+  .auth__error{
+    color: rgb(var(--color-error));
+    margin-bottom: 12px;
   }
 }

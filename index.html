@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/x-icon" href="/src/assets/images/favicon.ico">
   <title>ToDoList</title>
 </head>
 
@@ -32,6 +33,13 @@
           </li>
         </ul>
       </nav>
+
+      <button class="button button--big-icon sign-out sign-out-js">
+        <svg class="icon button__icon" aria-hidden="true">
+          <use xlink:href="/src/assets/images/sprite.svg#sign-out"></use>
+        </svg>
+      </button>
+
     </div>
 
     <div class="sidebar active" id="sidebar">
@@ -366,29 +374,6 @@
   <div class="layout" id="layout"></div>
   <script src="/src/index.ts" type="module"></script>
 
-  <!-- <script>
-    const body = document.getElementById("body");
-
-    var params = window
-      .location
-      .search
-      .replace('?', '')
-      .split('&')
-      .reduce(
-        function (p, e) {
-          var a = e.split('=');
-          p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
-          return p;
-        },
-        {}
-      );
-
-    body.classList.remove("light")
-    body.classList.remove("dark")
-    params.color = params.color ?? 'dark'
-    body.classList.add(params.color)
-
-  </script> -->
 </body>
 
 </html>
