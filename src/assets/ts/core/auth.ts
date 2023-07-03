@@ -1,7 +1,6 @@
-import closePreloader from './components/loader';
-import errorText from './const/errorText';
+import errorText from '../const/errorText';
+import firebase from '../firebase';
 
-import firebase from './firebase';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -22,6 +21,8 @@ class AuthUser {
   private user: any;
 
   private stateAuthForm: 'signin' | 'signup';
+  private readyResolver: any;
+  private readyPromise: Promise<void>;
 
   constructor() {
     this.authForms = null;
@@ -33,7 +34,17 @@ class AuthUser {
     this.authFormSignUpError = null;
     this.user = null;
     this.stateAuthForm = 'signin';
+    this.readyPromise = new Promise((resolve) => {
+      this.readyResolver = resolve;
+    });
     this.checkAuthUser();
+  }
+
+  public isReadyUser() {
+    return this.readyPromise;
+  }
+  public getUser() {
+    return this.user;
   }
 
   private checkAuthUser(): void {
@@ -41,10 +52,12 @@ class AuthUser {
     onAuthStateChanged(auth, (user) => {
       this.user = user;
       this.authViewHandler();
+
+      this.readyResolver();
     });
   }
 
-  private authViewHandler(): void {
+  private async authViewHandler(): Promise<void> {
     if (this.user) {
       if (this.authForms) this.removeAuthForm();
 
@@ -63,10 +76,6 @@ class AuthUser {
         this.showAuthForm();
       }
     }
-
-    setTimeout(() => {
-      closePreloader();
-    }, 1000);
   }
 
   private showAuthForm(): void {
@@ -113,6 +122,7 @@ class AuthUser {
     }
   }
 
+  // TODO: this should refactor
   private async authSignInHandler(e: Event): Promise<void> {
     e.preventDefault();
 
@@ -130,12 +140,12 @@ class AuthUser {
       );
     } catch (error) {
       const errorCode = error.code;
-      console.log(errorCode);
       this.authFormSignInError = target.querySelector('.auth__error');
       this.authFormSignInError.innerHTML = errorText(errorCode);
     }
   }
 
+  // TODO: this should refactor
   private async authSignUpHandler(e: Event): Promise<void> {
     e.preventDefault();
 
