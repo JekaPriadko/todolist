@@ -1,5 +1,5 @@
-import closePreloader from './loader';
-import errorText from './errorText';
+import closePreloader from './components/loader';
+import errorText from './const/errorText';
 
 import firebase from './firebase';
 import {

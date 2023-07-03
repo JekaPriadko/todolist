@@ -1,9 +1,9 @@
 import './assets/styles/index.scss';
 
 import AuthUser from './assets/ts/auth';
-import accordion from './assets/ts/accordion';
-import DraggerLayout from './assets/ts/dragger';
-import Sidebar from './assets/ts/sidebar';
+import accordion from './assets/ts/components/accordion';
+import DraggerLayout from './assets/ts/components/dragger';
+import Sidebar from './assets/ts/components/sidebar';
 
 document.addEventListener('DOMContentLoaded', (event) => {
   new AuthUser();

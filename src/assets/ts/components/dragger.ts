@@ -83,6 +83,7 @@ class DraggerLayout {
     if (newSidebarWidth > this.minW && newSidebarWidth < this.maxWSidebar) {
       this.sidebar.style.width = `${newSidebarWidth}px`;
     }
+
     this.lastDownX = e.clientX;
   }
 

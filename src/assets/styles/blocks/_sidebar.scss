@@ -14,12 +14,12 @@
   background: rgb(var(--color-left-sidebar-bg));
   height: 100%;
   padding: 14px 0;
-  overflow-y: auto;
 
   @include media-up(640px) {
     display: none;
     position: relative;
     transform: translateX(0);
+    transition: initial;
   }
 
   &.active {
@@ -35,7 +35,10 @@
       left: 0;
     }
   }
-
+  .sidebar__wrap {
+    overflow-y: auto;
+    height: 100vh;
+  }
 
   .sidebar__section {
     padding: 0;
