@@ -16,6 +16,7 @@ class TasksUser {
   }
 
   private prepareContent() {
+    console.log(this.userId);
     this.readyResolver();
   }
 }

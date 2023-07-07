@@ -11,6 +11,7 @@ import {
 
 class AuthUser {
   private authForms: HTMLElement | null;
+
   private authFormToggle: HTMLElement | null;
   private authFormSignIn: HTMLElement | null;
   private authFormSignUp: HTMLElement | null;
@@ -43,6 +44,11 @@ class AuthUser {
   public isReadyUser() {
     return this.readyPromise;
   }
+
+  public isAuth() {
+    return !!this.getUser();
+  }
+
   public getUser() {
     return this.user;
   }
