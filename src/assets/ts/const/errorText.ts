@@ -5,6 +5,6 @@ const errorsTest = {
   'auth/invalid-email': 'Email not valid',
 };
 
-export default function (code) {
+export default function getErrorText(code) {
   return errorsTest[code] || 'Unknown error';
 }

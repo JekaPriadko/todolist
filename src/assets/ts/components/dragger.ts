@@ -1,16 +1,24 @@
 class DraggerLayout {
   private content: HTMLElement | null;
+
   private sidebar: HTMLElement | null;
+
   private details: HTMLElement | null;
+
   private sidebarDragger: HTMLElement | null;
+
   private detailsDragger: HTMLElement | null;
 
   private isResizingSidebar: boolean;
+
   private isResizingDetails: boolean;
+
   private lastDownX: number;
 
   private readonly minW: number;
+
   private readonly maxWSidebar: number;
+
   private minWContent: number;
 
   constructor() {

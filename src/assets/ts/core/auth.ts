@@ -1,6 +1,3 @@
-import errorText from '../const/errorText';
-import firebase from '../firebase';
-
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,14 +6,22 @@ import {
   signOut,
 } from 'firebase/auth';
 
+import errorText from '../const/errorText';
+import firebase from '../firebase';
+/* eslint-disable */
 class AuthUser {
   private authForms: HTMLElement | null;
 
   private authFormToggle: HTMLElement | null;
+
   private authFormSignIn: HTMLElement | null;
+
   private authFormSignUp: HTMLElement | null;
+
   private authBtnSignOut: HTMLElement | null;
+
   private authFormSignInError: HTMLElement | null;
+
   private authFormSignUpError: HTMLElement | null;
 
   // eslint-disable-next-line
@@ -26,6 +31,7 @@ class AuthUser {
 
   // eslint-disable-next-line
   private readyResolver: any;
+
   private readyPromise: Promise<void>;
 
   constructor() {
@@ -81,9 +87,8 @@ class AuthUser {
         );
       }
     } else {
-      if (!this.authForms) {
-        this.showAuthForm();
-      }
+      if (!this.authForms) return;
+      this.showAuthForm();
     }
   }
 

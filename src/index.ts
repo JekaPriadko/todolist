@@ -10,15 +10,16 @@ import closePreloader from './assets/ts/components/loader';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const userHandler = new AuthUser();
-  await userHandler.isReadyUser()
-         if (userHandler.isAuth()) {
+  await userHandler.isReadyUser();
+  if (userHandler.isAuth()) {
     const tasksHandler = new TasksUser(userHandler.getUser().uid);
 
     await tasksHandler.isReadyTasks();
     accordion();
+    // eslint-disable-next-line
     new Sidebar();
+    // eslint-disable-next-line
     new DraggerLayout();
   }
-
   closePreloader();
 });

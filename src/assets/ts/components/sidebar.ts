@@ -1,9 +1,14 @@
 class Sidebar {
   private isOpen: boolean;
+
   private sidebar: HTMLElement;
+
   private mainLayout: HTMLElement;
+
   private sidebarToggleBtn: HTMLElement;
+
   private sidebarToggleBtnIcon: SVGUseElement;
+
   private pathSprite: string;
 
   constructor() {
@@ -11,6 +16,7 @@ class Sidebar {
     this.mainLayout = document.getElementById('layout');
     this.sidebarToggleBtn = document.getElementById('toggle-sidebar');
     this.sidebarToggleBtnIcon = this.sidebarToggleBtn.querySelector('use');
+    // eslint-disable-next-line
     this.pathSprite = this.sidebarToggleBtnIcon
       .getAttribute('xlink:href')
       .split('#')[0];
@@ -28,7 +34,11 @@ class Sidebar {
   }
 
   public toggle(): void {
-    this.isOpen ? this.close() : this.open();
+    if (this.isOpen) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   public open(): void {
@@ -56,8 +66,12 @@ class Sidebar {
 
   private init(): void {
     this.sidebar.classList.remove('active');
-    this.isOpen = window.innerWidth > 640 ? true : false;
-    this.isOpen ? this.open() : this.close();
+    this.isOpen = window.innerWidth > 640;
+    if (this.isOpen) {
+      this.open();
+    } else {
+      this.close();
+    }
   }
 }
 
