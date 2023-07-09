@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import eslintPlugin from 'vite-plugin-eslint';
 
 export default defineConfig({
   build: {
@@ -17,5 +18,11 @@ export default defineConfig({
       $fonts: resolve('public/fonts/'),
     },
   },
-  plugins: [],
+  plugins: [
+    eslintPlugin({
+      fix: false,
+      cache: false,
+      failOnWarning: true,
+    }),
+  ],
 });

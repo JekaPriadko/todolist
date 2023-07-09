@@ -4,7 +4,7 @@ class Sidebar {
   private mainLayout: HTMLElement;
   private sidebarToggleBtn: HTMLElement;
   private sidebarToggleBtnIcon: SVGUseElement;
-  private pathSprite: String;
+  private pathSprite: string;
 
   constructor() {
     this.sidebar = document.getElementById('sidebar');

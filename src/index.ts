@@ -8,20 +8,16 @@ import DraggerLayout from './assets/ts/components/dragger';
 import Sidebar from './assets/ts/components/sidebar';
 import closePreloader from './assets/ts/components/loader';
 
-document.addEventListener('DOMContentLoaded', async (event) => {
-
-console.log(1)
-
+document.addEventListener('DOMContentLoaded', async () => {
   const userHandler = new AuthUser();
-  await userHandler.isReadyUser();
-
-  if (userHandler.isAuth()) {
+  await userHandler.isReadyUser()
+         if (userHandler.isAuth()) {
     const tasksHandler = new TasksUser(userHandler.getUser().uid);
-         await tasksHandler.isReadyTasks();
 
+    await tasksHandler.isReadyTasks();
     accordion();
     new Sidebar();
-    new DraggerLayout()
+    new DraggerLayout();
   }
 
   closePreloader();

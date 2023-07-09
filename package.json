@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "author": "jeka.priadko@gmail.com",
   "scripts": {
-    "dev": "vite",
+    "dev": "eslint && vite",
     "build": "vite build",
     "serve": "vite preview",
-    "eslint": "eslint src",
-    "eslint:fix": "eslint src --fix"
+    "eslint": "eslint . --ext .ts",
+    "eslint:fix": "eslint . --ext .ts --fix"
   },
   "license": "MIT",
   "devDependencies": {
@@ -24,7 +24,8 @@
     "prettier": "2.8.8",
     "sass": "^1.63.2",
     "typescript": "5.1.3",
-    "vite": "4.3.9"
+    "vite": "4.3.9",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "dependencies": {
     "firebase": "^9.22.2"

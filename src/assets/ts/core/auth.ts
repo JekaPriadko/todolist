@@ -19,9 +19,12 @@ class AuthUser {
   private authFormSignInError: HTMLElement | null;
   private authFormSignUpError: HTMLElement | null;
 
+  // eslint-disable-next-line
   private user: any;
 
   private stateAuthForm: 'signin' | 'signup';
+
+  // eslint-disable-next-line
   private readyResolver: any;
   private readyPromise: Promise<void>;
 
@@ -139,11 +142,7 @@ class AuthUser {
     const password = target.querySelector('.auth__pass') as HTMLInputElement;
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email.value,
-        password.value
-      );
+      await signInWithEmailAndPassword(auth, email.value, password.value);
     } catch (error) {
       const errorCode = error.code;
       this.authFormSignInError = target.querySelector('.auth__error');
@@ -162,11 +161,7 @@ class AuthUser {
     const password = target.querySelector('.auth__pass') as HTMLInputElement;
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email.value,
-        password.value
-      );
+      await createUserWithEmailAndPassword(auth, email.value, password.value);
     } catch (error) {
       const errorCode = error.code;
       this.authFormSignUpError = target.querySelector('.auth__error');

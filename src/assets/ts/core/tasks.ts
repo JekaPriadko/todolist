@@ -1,5 +1,6 @@
 class TasksUser {
   private userId: string | null;
+  // eslint-disable-next-line
   private readyResolver: any;
   private readyPromise: Promise<void>;
 
