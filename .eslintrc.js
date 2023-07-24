@@ -27,5 +27,6 @@ module.exports = {
     'function-paren-newline': 'off',
     'import/no-extraneous-dependencies': 'off',
     'func-names': ['error', 'as-needed'],
+    'class-methods-use-this': 'off',
   },
 };
