@@ -5,7 +5,7 @@ export interface Task {
   completed: boolean | null;
   trash: boolean | null;
   list: string | null;
-  created: Date | null;
+  createdAt: Date | null;
   dueDate: Date | null;
   priority: 'high' | 'medium' | 'low' | 'none';
 }

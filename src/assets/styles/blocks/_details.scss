@@ -1,12 +1,39 @@
 .details {
   width: 300px;
   height: 100vh;
-  position: relative;
   flex-shrink: 0;
-  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgb(var(--color-main-bg));
+  z-index: 3;
+  width: 100%;
+  max-width: 500px;
+  transform: translateX(100%);
+  transition: all 0.35s ease;
+
+  @include media-up(500px) {
+    border-left: 3px solid rgba(var(--color-border), 0.1);
+  }
 
   @include media-up(960px) {
     display: block;
+    position: relative;
+    width: 300px;
+    border: 0;
+    transform: translateX(0);
+    transition: initial;
+  }
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  .details__dragger {
+    display: none;
+    @include media-up(960px) {
+      display: block;
+    }
   }
 
   .details__wrap {
@@ -30,6 +57,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    &-close {
+      flex-shrink: 0;
+      margin-right: 8px;
+      @include media-up(960px) {
+        display: none;
+      }
+    }
 
     &-checkbox {
       flex-shrink: 0;

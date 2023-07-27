@@ -1,0 +1,35 @@
+.delete {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  cursor: pointer;
+  color: rgba(var(--color-text-primary), 0.4);
+  &:hover{
+    color: rgba(var(--color-text-primary), 0.6);
+  }
+  .delete__item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all .35s ease;
+  }
+
+  .delete__main {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.trash {
+    .delete__item {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .delete__restore {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

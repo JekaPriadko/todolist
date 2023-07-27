@@ -1,3 +1,5 @@
+import { Task } from './interface/task';
+/* eslint-disable */
 class HTMLTasksUser {
   public static getHtmlBlockTask(
     title: string,
@@ -21,37 +23,42 @@ class HTMLTasksUser {
     </div>`;
   }
 
-  public static getHtmlListTask(id: string, title: string): string {
-    return `<div class="main__tasks-item task-item-js" data-id="${id}">
-      <div class="checkbox main__tasks-checkbox">
-        <svg class="icon checkbox__item checkbox__main " aria-hidden="true">
-          <use xlink:href="/src/assets/images/sprite.svg#checkbox"></use>
-        </svg>
-        <svg class="icon checkbox__item checkbox__completed" aria-hidden="true">
-          <use xlink:href="/src/assets/images/sprite.svg#completed-detail"></use>
-        </svg>
-      </div>
-      <span class="main__tasks-name">${title}</span>
+  public static getHtmlListTask(task: Task): string {
+    return `<div class="main__tasks-item task-item-js" data-id="${task.id}">
+        ${this.renderCheckbox(
+          task.completed,
+          'main__tasks-checkbox checkbox-task-js'
+        )}
 
-      <button class="button button--icon button--big-icon main__tasks-delete">
-        <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+      <span class="main__tasks-name">${task.title}</span>
+
+      <button type="button" class="delete button button--icon button--big-icon main__tasks-delete delete-task-js ${
+        task.trash ? 'trash' : ''
+      }">
+        <svg class="icon button__icon delete__main delete__item button__prepend-icon" aria-hidden="true">
           <use xlink:href="/src/assets/images/sprite.svg#delete"></use>
+        </svg>
+        <svg class="icon button__icon delete__item delete__restore button__prepend-icon" aria-hidden="true">
+          <use xlink:href="/src/assets/images/sprite.svg#restore"></use>
         </svg>
       </button>
     </div>`;
   }
 
-  public static getHtmlDetails(content: string): string {
+  public static getHtmlDetails(task: Task): string {
     return `<div class="details__main">
         <div class="details__header">
-          <div class="checkbox details__header-checkbox">
-            <svg class="icon checkbox__item checkbox__main" aria-hidden="true">
-              <use xlink:href="/src/assets/images/sprite.svg#checkbox"></use>
+          <button type="button" class="button button--icon details__header-close" id="close-details-js">
+            <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+              <use xlink:href="/src/assets/images/sprite.svg#close"></use>
             </svg>
-            <svg class="icon checkbox__item checkbox__completed" aria-hidden="true">
-              <use xlink:href="/src/assets/images/sprite.svg#completed-detail"></use>
-            </svg>
-          </div>
+          </button>
+
+          ${this.renderCheckbox(
+            task.completed,
+            'details__header-checkbox checkbox-details-task-js'
+          )}
+
           <div class="divider divider--vertical"></div>
           <button type="button" class="button details__header-date">
             <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
@@ -66,7 +73,9 @@ class HTMLTasksUser {
           </div>
         </div>
         <div class="details__content">
-          <input class="details__content-title" value="${content}" placeholder="What needs dooing?" />
+          <input class="details__content-title" value="${
+            task.title
+          }" placeholder="What needs dooing?" />
           <textarea name="details" class="details__content-input" placeholder="Description"></textarea>
         </div>
         <div class="details__footer">
@@ -95,6 +104,22 @@ class HTMLTasksUser {
           </div>
           <span class="details__empty-title">Click task title to view the detail</span>
         </div>`;
+  }
+
+  private static renderCheckbox(
+    status: boolean,
+    additionalClass: string
+  ): string {
+    return ` <button type="button" class="checkbox ${
+      status ? 'completed' : ''
+    } ${additionalClass}">
+    <svg class="icon checkbox__item checkbox__main" aria-hidden="true">
+      <use xlink:href="/src/assets/images/sprite.svg#checkbox"></use>
+    </svg>
+    <svg class="icon checkbox__item checkbox__completed" aria-hidden="true">
+      <use xlink:href="/src/assets/images/sprite.svg#completed-detail"></use>
+    </svg>
+  </button>`;
   }
 }
 

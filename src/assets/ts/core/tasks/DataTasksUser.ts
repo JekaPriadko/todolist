@@ -2,8 +2,11 @@ import {
   getFirestore,
   collection,
   addDoc,
+  setDoc,
   getDocs,
+  doc,
   Firestore,
+  Timestamp,
 } from 'firebase/firestore';
 
 import firebase from '../../firebase';
@@ -32,23 +35,49 @@ class DataTasksUser {
       completed: task.data()?.completed,
       trash: task.data()?.trash,
       list: task.data()?.list,
-      created: task.data()?.created,
+      createdAt: task.data()?.createdAt.toDate(),
       dueDate: task.data()?.dueDate,
       priority: task.data()?.priority,
     }));
 
-    return this.allItems;
+    console.log(this.allItems);
+
+    return this.allItems.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime();
+    });
   }
 
   public getCountAllItems(): number {
     return this.allItems.length;
   }
 
+  public getOneItem(id: string): Task {
+    return this.allItems.find((item) => item.id === id);
+  }
+
   public async createItem(task: Task): Promise<boolean> {
     try {
-      await addDoc(collection(this.db, this.userId), task);
+      await addDoc(collection(this.db, this.userId), {
+        createdAt: Timestamp.fromDate(task.createdAt),
+        ...task,
+      });
     } catch (event) {
       console.error('Error adding task: ', event);
+      return false;
+    }
+
+    return true;
+  }
+
+  public async updateItem(task: Task): Promise<boolean> {
+    try {
+      await setDoc(doc(this.db, this.userId, task.id), {
+        ...task,
+      });
+    } catch (event) {
+      console.error('Error update task: ', event);
       return false;
     }
 
