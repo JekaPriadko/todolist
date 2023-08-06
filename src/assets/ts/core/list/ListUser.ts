@@ -17,9 +17,15 @@ class ListUser {
 
   private addListModal: HTMLElement | null;
 
+  private addListForm: HTMLFormElement | null;
+
+  private addListColorField: HTMLInputElement | null;
+
+  private addListTitleInput: HTMLInputElement | null;
+
   private addListModalClose: NodeListOf<HTMLElement> | null;
 
-  private addListForm: HTMLFormElement | null;
+  private activeInputColor: Boolean = false;
 
   constructor(userId) {
     this.userId = userId;
@@ -33,9 +39,16 @@ class ListUser {
     ) as HTMLFormElement;
 
     this.addListModalClose = document.querySelectorAll('.close-add-list-js');
+    this.addListColorField = this.addListModal.querySelector(
+      '.modal__content-color'
+    );
+    this.addListTitleInput = this.addListModal.querySelector(
+      '.modal__content-title'
+    );
 
     this.addListForm.addEventListener('submit', (e) => this.addList(e));
 
+    this.handleFocusInputColor();
     this.handleModalAddList();
   }
 
@@ -67,6 +80,17 @@ class ListUser {
     });
   }
 
+  private handleFocusInputColor() {
+    this.addListColorField.addEventListener('focus', () => {
+      this.activeInputColor = true;
+    });
+    this.addListColorField.addEventListener('blur', () => {
+      setTimeout(() => {
+        this.activeInputColor = false;
+      }, 100);
+    });
+  }
+
   private addList(e: SubmitEvent): void {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
@@ -87,7 +111,14 @@ class ListUser {
   }
 
   private closeModal() {
+    if (this.activeInputColor) return;
+
     this.addListModal.classList.remove('active');
+  }
+
+  private setupDataModal() {
+    this.addListColorField.value = '#ffffff';
+    this.addListTitleInput.value = 'QwTest';
   }
 
   private renderLists(list: List): string {
@@ -96,6 +127,7 @@ class ListUser {
         <span class="sidebar__lists-name">${list.title}</span>
         <span class="sidebar__lists-color" style="background-color: ${list.color}"></span>
         <span class="sidebar__lists-count">0</span>
+        <div><div>
       </button>
     </li>`;
   }

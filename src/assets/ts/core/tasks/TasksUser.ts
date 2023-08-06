@@ -78,13 +78,13 @@ class TasksUser {
         const targetElement = e.target as HTMLElement;
 
         const itemId = item.getAttribute('data-id');
-        const isButton = targetElement.closest('button');
-
-        if (isButton) {
+        const isActionButton = targetElement.closest('.action-btn-js');
+        if (isActionButton) {
           const oneItem: Task = this.dataTask.getOneItem(itemId);
 
-          const isCheckbox = isButton.classList.contains('checkbox-task-js');
-          const isDelete = isButton.classList.contains('delete-task-js');
+          const isCheckbox =
+            isActionButton.classList.contains('checkbox-task-js');
+          const isDelete = isActionButton.classList.contains('delete-task-js');
 
           if (isCheckbox) {
             const newOneItem: Task = {
@@ -147,7 +147,7 @@ class TasksUser {
       ? HTMLTasksUser.getHtmlDetails(oneItem)
       : HTMLTasksUser.getHtmlEmptyDetails();
 
-    this.handleDetailsClick(oneItem);
+    this.handleDetailsClick();
     this.formDetailsTask = document.getElementById('details-form-js');
     if (this.formDetailsTask) {
       this.formDetailsTask.addEventListener('submit', (e) =>
@@ -156,18 +156,13 @@ class TasksUser {
     }
   }
 
-  private handleDetailsClick(oneItem: Task): void {
+  private handleDetailsClick(): void {
     const checkboxDetails = document.querySelector('.checkbox-details-task-js');
     if (checkboxDetails) {
       checkboxDetails.addEventListener('click', async () => {
-        const newOneItem: Task = {
-          ...oneItem,
-          completed: !oneItem.completed,
-        };
-
-        await this.dataTask.updateItem(newOneItem);
-        await this.renderTasksList();
-        this.handleRouteChange();
+        checkboxDetails.classList.toggle('completed');
+        const statusCheckbox = checkboxDetails.querySelector('input');
+        statusCheckbox.checked = !statusCheckbox.checked;
       });
     }
 
@@ -195,6 +190,7 @@ class TasksUser {
       title: formData.get('title') as string,
       description: (formData.get('description') as string) || '',
       priority: Number(formData.get('priority')) as Priority,
+      completed: formData.get('completed') === 'on',
     };
 
     const resUpdate = await this.dataTask.updateItem(newOneItem);

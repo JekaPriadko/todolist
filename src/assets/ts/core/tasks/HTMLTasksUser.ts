@@ -27,14 +27,14 @@ class HTMLTasksUser {
     return `<div class="main__tasks-item task-item-js" data-id="${task.id}">
         ${this.renderCheckbox(
           task.completed,
-          `main__tasks-checkbox checkbox-task-js checkbox--priority-${task.priority}`
+          `main__tasks-checkbox checkbox-task-js checkbox--priority-${task.priority} action-btn-js`
         )}
 
       <span class="main__tasks-name">${task.title}</span>
 
       <button type="button" class="delete button button--icon button--big-icon main__tasks-delete delete-task-js ${
         task.trash ? 'trash' : ''
-      }">
+      } action-btn-js">
         <svg class="icon button__icon delete__main delete__item button__prepend-icon" aria-hidden="true">
           <use xlink:href="/src/assets/images/sprite.svg#delete"></use>
         </svg>
@@ -70,7 +70,9 @@ class HTMLTasksUser {
               <input type="hidden" name="priority" value="0" class="priority-input-js">
               <button class="button button--icon button--big-icon priority-btn priority-show-js" type="button">
                 <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
-                  <use xlink:href="/src/assets/images/sprite.svg#priority-${task.priority}"></use>
+                  <use xlink:href="/src/assets/images/sprite.svg#priority-${
+                    task.priority
+                  }"></use>
                 </svg>
               </button>
               <div class="priority__list">
@@ -138,16 +140,19 @@ class HTMLTasksUser {
     status: boolean,
     additionalClass: string
   ): string {
-    return ` <button type="button" class="checkbox ${
-      status ? 'completed' : ''
-    } ${additionalClass}">
-    <svg class="icon checkbox__item checkbox__main" aria-hidden="true">
-      <use xlink:href="/src/assets/images/sprite.svg#checkbox"></use>
-    </svg>
-    <svg class="icon checkbox__item checkbox__completed" aria-hidden="true">
-      <use xlink:href="/src/assets/images/sprite.svg#completed-detail"></use>
-    </svg>
-  </button>`;
+    return `<div class="checkbox ${status && 'completed'} ${additionalClass}">
+      <input type="checkbox" name="completed" ${
+        status && 'checked'
+      } style="display:none">
+      <button type="button" class="checkbox__btn">
+        <svg class="icon checkbox__item checkbox__main" aria-hidden="true">
+          <use xlink:href="/src/assets/images/sprite.svg#checkbox"></use>
+        </svg>
+        <svg class="icon checkbox__item checkbox__completed" aria-hidden="true">
+          <use xlink:href="/src/assets/images/sprite.svg#completed-detail"></use>
+        </svg>
+      </button>
+    </div>`;
   }
 }
 

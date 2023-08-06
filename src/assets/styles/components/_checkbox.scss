@@ -1,29 +1,51 @@
 .checkbox {
-  width: 22px;
-  height: 22px;
-  position: relative;
-  cursor: pointer;
-  color: rgb(var(--color-text-primary));
   opacity: 0.8;
+
+  .checkbox__btn {
+    position: relative;
+    cursor: pointer;
+    color: rgb(var(--color-text-primary));
+    width: 22px;
+    height: 22px;
+  }
 
   &:hover {
     opacity: 1;
   }
 
   &.checkbox--priority-0 {
-    color: rgb(var(--color-text-primary), 0.4);
+    .checkbox__btn {
+      color: rgb(var(--color-text-primary), 0.4);
+    }
   }
 
   &.checkbox--priority-1 {
-    color: rgb(var(--priority-1));
+    .checkbox__btn {
+      color: rgb(var(--priority-1));
+    }
   }
 
   &.checkbox--priority-2 {
-    color: rgb(var(--priority-2));
+    .checkbox__btn {
+      color: rgb(var(--priority-2));
+    }
   }
 
   &.checkbox--priority-3 {
-    color: rgb(var(--priority-3));
+    .checkbox__btn {
+      color: rgb(var(--priority-3));
+    }
+  }
+
+  &.completed {
+    .checkbox__item {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .checkbox__completed {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 
   .checkbox__item {
@@ -39,15 +61,5 @@
   .checkbox__main {
     opacity: 1;
     visibility: visible;
-  }
-  &.completed {
-    .checkbox__item {
-      opacity: 0;
-      visibility: hidden;
-    }
-    .checkbox__completed {
-      opacity: 1;
-      visibility: visible;
-    }
   }
 }
