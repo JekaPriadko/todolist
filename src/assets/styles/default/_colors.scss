@@ -10,17 +10,22 @@ $xxl: 1400px;
 
 .dark {
   --color-main-bg: 30, 30, 30;
+
   --color-left-navbar-bg: 0, 0, 0;
   --color-left-sidebar-bg: 25, 25, 25;
 
   --color-text-primary: 255, 255, 255;
 
-  --color-primary: 71,114,250;
+  --color-primary: 71, 114, 250;
 
   --color-border: 255, 255, 255;
   --color-dark: 255, 255, 255;
 
   --color-error: 255, 0, 0;
+
+  --priority-1: 71, 114, 250;
+  --priority-2: 255, 176, 0;
+  --priority-3: 224, 49, 49;
 }
 
 .light {

@@ -47,6 +47,7 @@ class AuthUser {
     this.readyPromise = new Promise((resolve) => {
       this.readyResolver = resolve;
     });
+
     this.checkAuthUser();
   }
 
@@ -77,6 +78,7 @@ class AuthUser {
       if (this.authForms) this.removeAuthForm();
 
       this.authBtnSignOut = document.querySelector('.sign-out-js');
+
       if (this.authBtnSignOut) {
         this.authBtnSignOut.addEventListener(
           'click',
@@ -87,7 +89,7 @@ class AuthUser {
         );
       }
     } else {
-      if (!this.authForms) return;
+      if (this.authForms) return;
       this.showAuthForm();
     }
   }
@@ -173,6 +175,7 @@ class AuthUser {
       this.authFormSignUpError.innerHTML = errorText(errorCode);
     }
   }
+
 
   private toggleAuthForm(): void {
     if (this.authForms) {

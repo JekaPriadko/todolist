@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import {
   getFirestore,
   collection,
@@ -5,12 +7,13 @@ import {
   setDoc,
   getDocs,
   doc,
+  onSnapshot,
   Firestore,
   Timestamp,
 } from 'firebase/firestore';
 
 import firebase from '../../firebase';
-import { Task } from './interface/task';
+import { Task } from '../../entity/task';
 
 class DataTasksUser {
   private db: Firestore;
@@ -40,7 +43,7 @@ class DataTasksUser {
       priority: task.data()?.priority,
     }));
 
-    console.log(this.allItems);
+    this.allItems = this.allItems.filter((item) => item.trash !== true);
 
     return this.allItems.sort((a, b) => {
       const dateA = new Date(a.createdAt);

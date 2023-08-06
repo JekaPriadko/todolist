@@ -1,6 +1,6 @@
 import HTMLTasksUser from './HTMLTasksUser';
 import DataTasksUser from './DataTasksUser';
-import { Task } from './interface/task';
+import { Task, Priority } from '../../entity/task';
 
 class TasksUser {
   // eslint-disable-next-line
@@ -21,6 +21,8 @@ class TasksUser {
   private taskDetailsWrap: HTMLElement | null;
 
   private formCreateTask: HTMLElement | null;
+
+  private formDetailsTask: HTMLElement | null;
 
   constructor(userId) {
     this.userId = userId;
@@ -103,10 +105,8 @@ class TasksUser {
           await this.renderTasksList();
         } else {
           this.clearActiveTasks();
-          item.classList.add('active');
 
           const newPath = `?taskId=${itemId}`;
-
           window.history.pushState(null, '', newPath);
           this.taskDetails.classList.add('active');
         }
@@ -122,17 +122,38 @@ class TasksUser {
     });
   }
 
-  private handleRouteChange() {
+  private setActiveTask() {
+    const itemId = this.getItemIdFromUrl();
+    const taskItem = document.querySelector(
+      `.task-item-js[data-id="${itemId}"]`
+    );
+    if (taskItem) {
+      taskItem.classList.add('active');
+    }
+  }
+
+  private getItemIdFromUrl(): string | null {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const itemId = urlParams.get('taskId');
+    return urlParams.get('taskId') || null;
+  }
+
+  private handleRouteChange() {
+    const itemId = this.getItemIdFromUrl();
     const oneItem: Task = this.dataTask.getOneItem(itemId);
+    this.setActiveTask();
 
     this.taskDetailsWrap.innerHTML = oneItem
       ? HTMLTasksUser.getHtmlDetails(oneItem)
       : HTMLTasksUser.getHtmlEmptyDetails();
 
     this.handleDetailsClick(oneItem);
+    this.formDetailsTask = document.getElementById('details-form-js');
+    if (this.formDetailsTask) {
+      this.formDetailsTask.addEventListener('submit', (e) =>
+        this.updateTask(e, oneItem)
+      );
+    }
   }
 
   private handleDetailsClick(oneItem: Task): void {
@@ -164,27 +185,50 @@ class TasksUser {
     }
   }
 
-  private async createTask(e: SubmitEvent): Promise<void> {
+  private async updateTask(e: SubmitEvent, oneItem: Task): Promise<void> {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    const title = target.querySelector(
-      '.create-task-title-js'
-    ) as HTMLInputElement;
+    const formData = new FormData(target);
+
+    const newOneItem: Task = {
+      ...oneItem,
+      title: formData.get('title') as string,
+      description: (formData.get('description') as string) || '',
+      priority: Number(formData.get('priority')) as Priority,
+    };
+
+    const resUpdate = await this.dataTask.updateItem(newOneItem);
+
+    if (resUpdate) {
+      const currentUrl = window.location.href;
+      const urlWithoutParams = currentUrl.split('?')[0];
+      window.history.replaceState({}, document.title, urlWithoutParams);
+      await this.renderTasksList();
+      this.handleRouteChange();
+    }
+  }
+
+  private async createTask(e: SubmitEvent): Promise<void> {
+    /* eslint-disable */
+    e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    const formData = new FormData(target);
 
     const addedItems = await this.dataTask.createItem({
       createdAt: new Date(),
-      title: title.value,
+      title: formData.get('title') as string,
       description: null,
       completed: null,
       trash: null,
       list: null,
       dueDate: null,
-      priority: 'none',
+      priority: Number(formData.get('priority')) as Priority,
     });
 
     if (addedItems) {
-      title.value = '';
+      target.reset();
       this.renderTasksList();
+      document.dispatchEvent(new Event('resetPriorityMainForm'));
     }
   }
 }

@@ -39,6 +39,15 @@
     }
   }
 
+  &--cancel {
+    background: transparent;
+    border: 2px solid rgba(var(--color-border), 0.1);
+    color: rgb(var(--color-text-primary));
+    padding: 10px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
   &--icon {
     .button__prepend-icon,
     .button__append-icon {

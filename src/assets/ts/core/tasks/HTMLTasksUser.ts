@@ -1,4 +1,4 @@
-import { Task } from './interface/task';
+import { Task } from '../../entity/task';
 /* eslint-disable */
 class HTMLTasksUser {
   public static getHtmlBlockTask(
@@ -27,7 +27,7 @@ class HTMLTasksUser {
     return `<div class="main__tasks-item task-item-js" data-id="${task.id}">
         ${this.renderCheckbox(
           task.completed,
-          'main__tasks-checkbox checkbox-task-js'
+          `main__tasks-checkbox checkbox-task-js checkbox--priority-${task.priority}`
         )}
 
       <span class="main__tasks-name">${task.title}</span>
@@ -46,7 +46,7 @@ class HTMLTasksUser {
   }
 
   public static getHtmlDetails(task: Task): string {
-    return `<div class="details__main">
+    return `<form action="#" class="details__main" id="details-form-js">
         <div class="details__header">
           <button type="button" class="button button--icon details__header-close" id="close-details-js">
             <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
@@ -66,17 +66,45 @@ class HTMLTasksUser {
             </svg>
             <span class="button__text">Due Date</span>
           </button>
-          <div class="priority details__header-priority">
-            <svg class="icon priority__icon" aria-hidden="true">
-              <use xlink:href="/src/assets/images/sprite.svg#priority-0"></use>
-            </svg>
-          </div>
+            <div class="priority details__header-priority priority-js">
+              <input type="hidden" name="priority" value="0" class="priority-input-js">
+              <button class="button button--icon button--big-icon priority-btn priority-show-js" type="button">
+                <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                  <use xlink:href="/src/assets/images/sprite.svg#priority-${task.priority}"></use>
+                </svg>
+              </button>
+              <div class="priority__list">
+                <button type="button" class="priority__item priority-btn-js" data-priority="3">
+                  <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                    <use xlink:href="/src/assets/images/sprite.svg#priority-3"></use>
+                  </svg>
+                </button>
+                <button type="button" class="priority__item priority-btn-js" data-priority="2">
+                  <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                    <use xlink:href="/src/assets/images/sprite.svg#priority-2"></use>
+                  </svg>
+                </button>
+                <button type="button" class="priority__item priority-btn-js" data-priority="1">
+                  <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                    <use xlink:href="/src/assets/images/sprite.svg#priority-1"></use>
+                  </svg>
+                </button>
+                <button type="button" class="priority__item priority-btn-js" data-priority="0">
+                  <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                    <use xlink:href="/src/assets/images/sprite.svg#priority-0"></use>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
         </div>
         <div class="details__content">
-          <input class="details__content-title" value="${
+          <input class="details__content-title title-details-js" value="${
             task.title
-          }" placeholder="What needs dooing?" />
-          <textarea name="details" class="details__content-input" placeholder="Description"></textarea>
+          }" name="title" placeholder="What needs dooing?" required />
+          <textarea name="description" class="details__content-input" placeholder="Description">${
+            task.description || ''
+          }</textarea>
         </div>
         <div class="details__footer">
           <button type="button" class="button details__footer-list">
@@ -85,11 +113,11 @@ class HTMLTasksUser {
             </svg>
             <span class="button__text">Inbox</span>
           </button>
-          <button type="button" class="button button--save">
+          <button type="submit" class="button button--save">
             <span class="button__text">Save</span>
           </button>
         </div>
-      </div>`;
+      </form>`;
   }
 
   public static getHtmlEmptyDetails(): string {
