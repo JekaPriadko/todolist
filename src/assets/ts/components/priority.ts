@@ -46,7 +46,7 @@ export default () => {
     }
   });
 
-  document.addEventListener('resetPriorityMainForm', () => {
+  document.addEventListener('resetMainForm', () => {
     const priorityMainForm = document.querySelector(
       '#create-task-js .priority-js'
     ) as HTMLElement;

@@ -86,6 +86,7 @@
   }
 
   .sidebar__lists {
+    position: relative;
     &-header {
       padding: 0 8px;
       height: 30px;
@@ -127,6 +128,7 @@
     &-item {
       padding: 0 8px;
       height: 40px;
+      position: relative;
     }
 
     &-button {
@@ -143,6 +145,13 @@
 
       &:hover {
         background: rgba(var(--color-border), 0.1);
+        .sidebar__lists-info {
+          opacity: 0;
+        }
+        .sidebar__lists-actions {
+          opacity: 1;
+          visibility: visible;
+        }
       }
 
       &.active {
@@ -158,19 +167,57 @@
     }
 
     &-name {
-      margin-right: 12px;
+      margin-right: 20px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &-color {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: yellowgreen;
-      margin-left: auto;
       margin-right: 12px;
+      display: block;
     }
 
     &-count {
+      min-width: 16px;
+      text-align: right;
+    }
+
+    &-info {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    &-actions {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translate(0, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      opacity: 0;
+      visibility: hidden;
+    }
+    &-edit {
+      color: rgb(var(--color-text-primary), 0.6);
+      margin-right: 4px;
+      cursor: pointer;
+      &:hover {
+        color: rgb(var(--color-text-primary), 0.8);
+      }
+    }
+    &-delete {
+      color: rgb(var(--color-text-primary), 0.6);
+      cursor: pointer;
+      &:hover {
+        color: rgb(var(--color-text-primary), 0.8);
+      }
     }
   }
   .sidebar__dragger {

@@ -1,5 +1,7 @@
 import HTMLTasksUser from './HTMLTasksUser';
 import DataTasksUser from './DataTasksUser';
+import ListUser from '../list/ListUser';
+
 import { Task, Priority } from '../../entity/task';
 
 class TasksUser {
@@ -16,6 +18,8 @@ class TasksUser {
 
   private taskItems: NodeListOf<HTMLElement> | null;
 
+  private listHandler: ListUser;
+
   private taskDetails: HTMLElement | null;
 
   private taskDetailsWrap: HTMLElement | null;
@@ -24,8 +28,10 @@ class TasksUser {
 
   private formDetailsTask: HTMLElement | null;
 
-  constructor(userId) {
+  constructor(userId, listHandler: ListUser) {
     this.userId = userId;
+
+    this.listHandler = listHandler;
 
     this.dataTask = new DataTasksUser(this.userId);
 
@@ -44,10 +50,15 @@ class TasksUser {
     await this.renderTasksList();
     this.handleRouteChange();
 
-    this.formCreateTask.addEventListener('submit', (e) => this.createTask(e));
-
     // ================================================================
     this.readyResolver();
+    // ================================================================
+    this.formCreateTask.addEventListener('submit', (e) => this.createTask(e));
+
+    document.addEventListener('changedList', async () => {
+      await this.renderTasksList();
+      this.handleRouteChange();
+    });
   }
 
   public isReadyTasks() {
@@ -58,7 +69,12 @@ class TasksUser {
     const allItems = await this.dataTask.getAllItems();
 
     const htmlListTasks = allItems
-      .map((task) => HTMLTasksUser.getHtmlListTask(task))
+      .map((task) =>
+        HTMLTasksUser.getHtmlListTask(
+          task,
+          ListUser.getOneLists(this.listHandler, task.list)
+        )
+      )
       .join('');
 
     this.tasksList.innerHTML = HTMLTasksUser.getHtmlBlockTask(
@@ -101,6 +117,7 @@ class TasksUser {
               trash: !oneItem.trash,
             };
             await this.dataTask.updateItem(newOneItem);
+            document.dispatchEvent(new Event('changedTask'));
           }
           await this.renderTasksList();
         } else {
@@ -143,9 +160,14 @@ class TasksUser {
     const oneItem: Task = this.dataTask.getOneItem(itemId);
     this.setActiveTask();
 
+    /* eslint-disable */
     this.taskDetailsWrap.innerHTML = oneItem
-      ? HTMLTasksUser.getHtmlDetails(oneItem)
+      ? HTMLTasksUser.getHtmlDetails(
+          oneItem,
+          ListUser.getOneLists(this.listHandler, oneItem.list)
+        )
       : HTMLTasksUser.getHtmlEmptyDetails();
+    /* eslint-enable */
 
     this.handleDetailsClick();
     this.formDetailsTask = document.getElementById('details-form-js');
@@ -191,6 +213,7 @@ class TasksUser {
       description: (formData.get('description') as string) || '',
       priority: Number(formData.get('priority')) as Priority,
       completed: formData.get('completed') === 'on',
+      list: (formData.get('move-list') as string) || null,
     };
 
     const resUpdate = await this.dataTask.updateItem(newOneItem);
@@ -201,11 +224,12 @@ class TasksUser {
       window.history.replaceState({}, document.title, urlWithoutParams);
       await this.renderTasksList();
       this.handleRouteChange();
+
+      document.dispatchEvent(new Event('changedTask'));
     }
   }
 
   private async createTask(e: SubmitEvent): Promise<void> {
-    /* eslint-disable */
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
@@ -214,9 +238,9 @@ class TasksUser {
       createdAt: new Date(),
       title: formData.get('title') as string,
       description: null,
-      completed: null,
-      trash: null,
-      list: null,
+      completed: false,
+      trash: false,
+      list: (formData.get('move-list') as string) || null,
       dueDate: null,
       priority: Number(formData.get('priority')) as Priority,
     });
@@ -224,7 +248,8 @@ class TasksUser {
     if (addedItems) {
       target.reset();
       this.renderTasksList();
-      document.dispatchEvent(new Event('resetPriorityMainForm'));
+      document.dispatchEvent(new Event('resetMainForm'));
+      document.dispatchEvent(new Event('changedTask'));
     }
   }
 }

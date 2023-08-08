@@ -7,9 +7,10 @@ import {
   setDoc,
   getDocs,
   doc,
-  onSnapshot,
   Firestore,
   Timestamp,
+  query,
+  where,
 } from 'firebase/firestore';
 
 import firebase from '../../firebase';
@@ -85,6 +86,16 @@ class DataTasksUser {
     }
 
     return true;
+  }
+
+  public async getTasksByList(listId: string): Promise<number> {
+    const q = query(
+      collection(this.db, this.userId),
+      where('list', '==', listId),
+      where('trash', '==', false),
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.length;
   }
 }
 
