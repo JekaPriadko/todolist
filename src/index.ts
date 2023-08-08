@@ -4,11 +4,12 @@ import AuthUser from './assets/ts/core/auth';
 import TasksUser from './assets/ts/core/tasks/TasksUser';
 import ListUser from './assets/ts/core/list/ListUser';
 
+import ListHandler from './assets/ts/components/task/List';
+import PriorityHandler from './assets/ts/components/task/Priority';
+
 import accordion from './assets/ts/components/accordion';
-import priority from './assets/ts/components/priority';
-import moveList from './assets/ts/components/move-list';
-import DraggerLayout from './assets/ts/components/dragger';
 import Sidebar from './assets/ts/components/sidebar';
+import DraggerLayout from './assets/ts/components/dragger';
 import closePreloader from './assets/ts/components/loader';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -25,12 +26,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     await tasksHandler.isReadyTasks();
 
     accordion();
-    priority();
-    moveList(listHandler);
     // eslint-disable-next-line
     new Sidebar();
     // eslint-disable-next-line
     new DraggerLayout();
+
+    new ListHandler(listHandler).run();
+    new PriorityHandler().run();
   }
 
   closePreloader();
