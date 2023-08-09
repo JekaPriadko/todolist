@@ -201,11 +201,14 @@ class TasksUser {
       });
     }
   }
-
+  /* eslint-disable */
   private async updateTask(e: SubmitEvent, oneItem: Task): Promise<void> {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
+
+    const dueDateValue = formData.get('due-date') as string;
+    const dueDate = dueDateValue ? new Date(dueDateValue) : null;
 
     const newOneItem: Task = {
       ...oneItem,
@@ -214,6 +217,7 @@ class TasksUser {
       priority: Number(formData.get('priority')) as Priority,
       completed: formData.get('completed') === 'on',
       list: (formData.get('move-list') as string) || null,
+      dueDate: dueDate,
     };
 
     const resUpdate = await this.dataTask.updateItem(newOneItem);
@@ -234,16 +238,21 @@ class TasksUser {
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
 
-    const addedItems = await this.dataTask.createItem({
+    const dueDateValue = formData.get('due-date') as string
+    const dueDate = dueDateValue ? new Date(dueDateValue) : null;
+
+    const newOneItem: Task = {
       createdAt: new Date(),
       title: formData.get('title') as string,
       description: null,
       completed: false,
       trash: false,
       list: (formData.get('move-list') as string) || null,
-      dueDate: null,
+      dueDate: dueDate,
       priority: Number(formData.get('priority')) as Priority,
-    });
+    };
+
+    const addedItems = await this.dataTask.createItem(newOneItem);
 
     if (addedItems) {
       target.reset();

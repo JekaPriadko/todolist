@@ -140,6 +140,8 @@ class ListUser {
       ref(this.db, `${this.userId}/lists`),
       this.listsData.filter((item) => item !== null && item.id !== listId)
     );
+
+    document.dispatchEvent(new Event('changedList'));
   }
 
   private renderLists(list: List): string {

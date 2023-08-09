@@ -14,6 +14,7 @@
   <div class="preloader" id="main-preloader">
     <div class="preloader__loader"></div>
   </div>
+
   <div class="root" style="display: none;" id="root">
     <div class="navbar">
       <div class="user">
@@ -144,15 +145,22 @@
           Inbox
         </h1>
       </header>
+
       <div class="main__create">
         <form action="#" id="create-task-js">
           <input type="text" name="title" class="main__create-input create-task-title-js" placeholder="+ Add task to Inbox, press Enter to save" required>
+
           <div class="main__create-additional">
-            <button class="button button--icon button--big-icon" type="button">
-              <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
-                <use xlink:href="/src/assets/images/sprite.svg#date-unselected"></use>
-              </svg>
-            </button>
+
+            <div class="due-date due-date-js">
+              <input type="date" class="due-date__input due-date-input-js" name="due-date">
+              <button class="button button--icon button--big-icon due-date__show due-date-show-js" type="button">
+                <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+                  <use xlink:href="/src/assets/images/sprite.svg#date-unselected"></use>
+                </svg>
+              </button>
+            </div>
+
 
             <!-- ================================================ -->
             <div class="divider divider--vertical"></div>
@@ -173,6 +181,7 @@
             <!-- ================================================ -->
             <div class="divider divider--vertical"></div>
             <!-- ================================================ -->
+
             <div class="move-list move-list-js">
               <input type="hidden" name="move-list" class="move-list-input-js">
 
@@ -186,13 +195,13 @@
               </div>
 
             </div>
-            <!-- ================================================ -->
 
           </div>
         </form>
 
 
       </div>
+
       <div class="main__tasks" id="tasks-list-js">
         <!-- Here main list -->
       </div>
@@ -202,7 +211,7 @@
 
     <div class="details" id="details">
       <div class="details__wrap" id="details-wrap-js">
-
+        <!-- Here details one task -->
       </div>
 
       <div class="details__dragger dragger dragger--details" id="dragger-details"></div>
@@ -223,7 +232,8 @@
           </div>
           <div class="modal__content">
             <div class="modal__content-line">
-              <input type="text" name="list-title" class="modal__content-title" placeholder="List name" required maxlength="50">
+              <input type="text" name="list-title" class="modal__content-title" placeholder="List name" required
+                     maxlength="50">
               <input type="color" name="list-color" class="modal__content-color" value="#4772fa">
             </div>
           </div>

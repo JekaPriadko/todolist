@@ -6,6 +6,7 @@ import ListUser from './assets/ts/core/list/ListUser';
 
 import ListHandler from './assets/ts/components/task/List';
 import PriorityHandler from './assets/ts/components/task/Priority';
+import DueDate from './assets/ts/components/task/DueDate';
 
 import accordion from './assets/ts/components/accordion';
 import Sidebar from './assets/ts/components/sidebar';
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     new ListHandler(listHandler).run();
     new PriorityHandler().run();
+    new DueDate().run();
   }
 
   closePreloader();

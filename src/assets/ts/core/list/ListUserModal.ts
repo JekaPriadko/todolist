@@ -88,7 +88,6 @@ class ListUserModal {
   }
 
   public showAddModal() {
-    console.log(this.listsData);
     this.modal.classList.add('active');
   }
 

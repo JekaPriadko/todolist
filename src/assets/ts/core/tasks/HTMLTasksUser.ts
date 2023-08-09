@@ -1,6 +1,8 @@
 import { Task } from '../../entity/task';
 import { List } from '../../entity/list';
 
+import formatDateToYYYYMMDD from '../../utils/formatDate';
+
 /* eslint-disable */
 class HTMLTasksUser {
   public static getHtmlBlockTask(
@@ -53,18 +55,15 @@ class HTMLTasksUser {
   public static getHtmlDetails(task: Task, activeList: List): string {
     return `<form action="#" class="details__main" id="details-form-js">
       <div class="details__header">
-        <button
-          type="button"
-          class="button button--icon details__header-close"
-          id="close-details-js"
-        >
-          <svg
-            class="icon button__icon button__prepend-icon"
-            aria-hidden="true"
-          >
+        <button type="button" class="button button--icon details__header-close"
+          id="close-details-js" >
+          <svg class="icon button__icon button__prepend-icon"
+            aria-hidden="true" >
             <use xlink:href="/src/assets/images/sprite.svg#close"></use>
           </svg>
         </button>
+
+        <!-- ================================================ -->
 
         ${this.renderCheckbox(
           task.completed,
@@ -72,17 +71,25 @@ class HTMLTasksUser {
         )}
 
         <div class="divider divider--vertical"></div>
-        <button type="button" class="button details__header-date">
-          <svg
-            class="icon button__icon button__prepend-icon"
-            aria-hidden="true"
-          >
-            <use
-              xlink:href="/src/assets/images/sprite.svg#date-unselected"
-            ></use>
-          </svg>
-          <span class="button__text">Due Date</span>
-        </button>
+
+        <!-- ================================================ -->
+
+        <div class="due-date due-date-js ${task.dueDate && 'active'}">
+          <input type="date" class="due-date__input due-date-input-js" name="due-date" value="${
+            formatDateToYYYYMMDD(task.dueDate) || ''
+          }">
+          <button type="button" class="button details__header-date due-date__show due-date-show-js">
+            <svg class="icon button__icon button__prepend-icon" aria-hidden="true" >
+              <use xlink:href="/src/assets/images/sprite.svg#date-unselected"></use>
+            </svg>
+            <span class="button__text due-date-text-js"> ${
+              formatDateToYYYYMMDD(task.dueDate) || 'Due Date'
+            }</span>
+          </button>
+        </div>
+
+        <!-- ================================================ -->
+
         <div class="priority details__header-priority priority-js">
           <input
             type="hidden"
@@ -90,18 +97,11 @@ class HTMLTasksUser {
             value="${task.priority}"
             class="priority-input-js"
           />
-          <button
-            class="button button--icon button--big-icon priority-btn priority-show-js"
-            type="button"
-          >
-            <svg
-              class="icon button__icon button__prepend-icon"
-              aria-hidden="true"
-            >
-              <use
-                xlink:href="/src/assets/images/sprite.svg#priority-${
-                  task.priority
-                }"
+          <button class="button button--icon button--big-icon priority-btn priority-show-js" type="button">
+            <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
+              <use xlink:href="/src/assets/images/sprite.svg#priority-${
+                task.priority
+              }"
               ></use>
             </svg>
           </button>
@@ -110,6 +110,7 @@ class HTMLTasksUser {
           </div>
         </div>
       </div>
+
       <div class="details__content">
         <input
           class="details__content-title title-details-js"
@@ -122,9 +123,7 @@ class HTMLTasksUser {
           name="description"
           class="details__content-input"
           placeholder="Description"
-        >
-          ${task.description || ''}
-        </textarea>
+        >${task.description || ''}</textarea>
       </div>
       <div class="details__footer">
 

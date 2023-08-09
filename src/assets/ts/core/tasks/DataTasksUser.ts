@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {
   getFirestore,
   collection,
@@ -32,17 +30,22 @@ class DataTasksUser {
   public async getAllItems(): Promise<Array<Task>> {
     const querySnapshot = await getDocs(collection(this.db, this.userId));
 
-    this.allItems = querySnapshot.docs.map((task) => ({
-      id: task.id,
-      title: task.data()?.title,
-      description: task.data()?.description,
-      completed: task.data()?.completed,
-      trash: task.data()?.trash,
-      list: task.data()?.list,
-      createdAt: task.data()?.createdAt.toDate(),
-      dueDate: task.data()?.dueDate,
-      priority: task.data()?.priority,
-    }));
+    this.allItems = querySnapshot.docs.map((task) => {
+      const dueDate = task.data()?.dueDate;
+      const dueDateFormat = dueDate ? task.data()?.dueDate.toDate() : null;
+
+      return {
+        id: task.id,
+        title: task.data()?.title,
+        description: task.data()?.description,
+        completed: task.data()?.completed,
+        trash: task.data()?.trash,
+        list: task.data()?.list,
+        createdAt: task.data()?.createdAt.toDate(),
+        dueDate: dueDateFormat,
+        priority: task.data()?.priority,
+      };
+    });
 
     this.allItems = this.allItems.filter((item) => item.trash !== true);
 
@@ -65,6 +68,7 @@ class DataTasksUser {
     try {
       await addDoc(collection(this.db, this.userId), {
         createdAt: Timestamp.fromDate(task.createdAt),
+        dueDate: task.dueDate ? Timestamp.fromDate(task.dueDate) : null,
         ...task,
       });
     } catch (event) {
@@ -79,6 +83,7 @@ class DataTasksUser {
     try {
       await setDoc(doc(this.db, this.userId, task.id), {
         ...task,
+        dueDate: task.dueDate ? Timestamp.fromDate(task.dueDate) : null,
       });
     } catch (event) {
       console.error('Error update task: ', event);
@@ -92,7 +97,7 @@ class DataTasksUser {
     const q = query(
       collection(this.db, this.userId),
       where('list', '==', listId),
-      where('trash', '==', false),
+      where('trash', '==', false)
     );
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.length;

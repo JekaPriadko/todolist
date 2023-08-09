@@ -1,0 +1,19 @@
+.due-date{
+  position: relative;
+
+  &.active{
+    .due-date__show {
+      color: rgb(var(--color-primary));
+    }
+  }
+
+  .due-date__input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: -1;
+  }
+}
