@@ -5,13 +5,12 @@ import ListUser from '../list/ListUser';
 
 import { Task, Priority } from '../../entity/task';
 
-import {
-  setParamToUrl,
-  getParamforUrl,
-  deleteParamFromUrl,
-} from '../../utils/updateUrl';
-
 class TasksUser {
+  // eslint-disable-next-line
+  private readyResolver: any;
+
+  private readyPromise: Promise<void>;
+
   private userId: string | null;
 
   private dataTask: DataTasksUser;
@@ -44,20 +43,30 @@ class TasksUser {
   }
 
   public async run() {
+    this.readyPromise = new Promise((resolve) => {
+      this.readyResolver = resolve;
+    });
+    // ================================================================
+
     await this.renderTasksList();
     this.handleRouteChange();
-    this.addEventListeners();
-  }
 
-  private addEventListeners() {
+    // ================================================================
+    this.readyResolver();
+    // ================================================================
     this.formCreateTask.addEventListener('submit', (e) => this.createTask(e));
+
     document.addEventListener('changedList', async () => {
       await this.renderTasksList();
       this.handleRouteChange();
     });
   }
 
-  private async renderTasksList() {
+  public isReadyTasks() {
+    return this.readyPromise;
+  }
+
+  public async renderTasksList() {
     const allItems = await this.dataTask.getAllItems();
 
     const htmlListTasks = allItems
@@ -114,8 +123,9 @@ class TasksUser {
           await this.renderTasksList();
         } else {
           this.clearActiveTasks();
-          setParamToUrl({ taskId: itemId });
 
+          const newPath = `?taskId=${itemId}`;
+          window.history.pushState(null, '', newPath);
           this.taskDetails.classList.add('active');
         }
 
@@ -130,10 +140,26 @@ class TasksUser {
     });
   }
 
+  private setActiveTask() {
+    const itemId = this.getItemIdFromUrl();
+    const taskItem = document.querySelector(
+      `.task-item-js[data-id="${itemId}"]`
+    );
+    if (taskItem) {
+      taskItem.classList.add('active');
+    }
+  }
+
+  private getItemIdFromUrl(): string | null {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get('taskId') || null;
+  }
+
   private handleRouteChange() {
-    const itemId = getParamforUrl('taskId');
+    const itemId = this.getItemIdFromUrl();
     const oneItem: Task = this.dataTask.getOneItem(itemId);
-    this.setActiveClassForTask();
+    this.setActiveTask();
 
     /* eslint-disable */
     this.taskDetailsWrap.innerHTML = oneItem
@@ -176,17 +202,6 @@ class TasksUser {
       });
     }
   }
-
-  private setActiveClassForTask() {
-    const itemId = getParamforUrl('taskId');
-    const taskItem = document.querySelector(
-      `.task-item-js[data-id="${itemId}"]`
-    );
-    if (taskItem) {
-      taskItem.classList.add('active');
-    }
-  }
-
   /* eslint-disable */
   private async updateTask(e: SubmitEvent, oneItem: Task): Promise<void> {
     e.preventDefault();
@@ -209,7 +224,9 @@ class TasksUser {
     const resUpdate = await this.dataTask.updateItem(newOneItem);
 
     if (resUpdate) {
-      deleteParamFromUrl('taskId');
+      const currentUrl = window.location.href;
+      const urlWithoutParams = currentUrl.split('?')[0];
+      window.history.replaceState({}, document.title, urlWithoutParams);
       await this.renderTasksList();
       this.handleRouteChange();
 

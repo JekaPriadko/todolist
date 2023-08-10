@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await listHandler.isReadyList();
 
     const tasksHandler = new TasksUser(userHandler.getUser().uid, listHandler);
-    tasksHandler.run();
-    await tasksHandler.isReadyTasks();
+    await tasksHandler.run();
 
     accordion();
     // eslint-disable-next-line

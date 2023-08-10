@@ -10,7 +10,11 @@ import {
 
 import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
+import FilterTask from '../tasks/FilterTask';
+
 import { List } from '../../entity/list';
+
+import { getParamforUrl } from '../../utils/updateUrl';
 
 class ListUser {
   // eslint-disable-next-line
@@ -26,6 +30,8 @@ class ListUser {
 
   private dataTask: DataTasksUser;
 
+  private filterTask: FilterTask;
+
   private modalAddList: ListUserModal;
 
   private listBlock: HTMLElement | null;
@@ -37,6 +43,8 @@ class ListUser {
     this.dataTask = new DataTasksUser(this.userId);
 
     this.modalAddList = new ListUserModal(this.userId, this.db, this.listsData);
+
+    this.filterTask = new FilterTask(this.listsData);
 
     this.listBlock = document.getElementById('lists-js');
 
@@ -53,6 +61,7 @@ class ListUser {
     const starCountRef = ref(this.db, `${this.userId}/lists`);
 
     await this.getOnceDataList();
+    this.filterTask.init();
 
     onValue(starCountRef, (snapshot) => {
       const dataFirebase = snapshot.val() || [];
@@ -103,6 +112,7 @@ class ListUser {
     this.handleClickListItem();
 
     this.modalAddList.updateListsData(this.listsData);
+    this.filterTask.updateListsData(this.listsData);
   }
 
   private handleClickListItem() {
@@ -116,6 +126,7 @@ class ListUser {
 
         const isEdit = targetElement.closest('.sidebar__lists-edit');
         if (isEdit) {
+          e.stopPropagation();
           this.modalAddList.setStatusModal('update');
           this.modalAddList.setupDataModal(
             this.listsData.find((elem) => elem.id === listId)
@@ -126,28 +137,32 @@ class ListUser {
 
         const isDelete = targetElement.closest('.sidebar__lists-delete');
         if (isDelete) {
+          e.stopPropagation();
           this.deleteListItem(listId);
-          return;
         }
-
-        console.log('make filter');
       });
     });
   }
 
-  private deleteListItem(listId: string) {
-    set(
+  private async deleteListItem(listId: string) {
+    await set(
       ref(this.db, `${this.userId}/lists`),
       this.listsData.filter((item) => item !== null && item.id !== listId)
     );
+
+    if (getParamforUrl('listId') === listId) {
+      this.filterTask.resetAllFilter();
+    }
 
     document.dispatchEvent(new Event('changedList'));
   }
 
   private renderLists(list: List): string {
     /* eslint-disable */
-    return `<li class="sidebar__lists-item list-item-js" data-id="${list.id}">
-      <div class="sidebar__lists-button">
+    return `<li class="sidebar__lists-item list-item-js" data-id="${list.id}" >
+      <div class="sidebar__lists-button  make-filrer-js ${
+        list.id === getParamforUrl('listId') ? 'active' : ''
+      }" data-filter="listId">
         <span class="sidebar__lists-name">${list.title}</span>
         <div class="sidebar__lists-info">
           <span class="sidebar__lists-color" style="background-color: ${

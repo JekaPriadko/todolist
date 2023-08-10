@@ -107,7 +107,7 @@ class ListUserModal {
     this.statusModal = newStatus;
   }
 
-  private addList(e: SubmitEvent): void {
+  private async addList(e: SubmitEvent): Promise<void> {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
@@ -121,7 +121,7 @@ class ListUserModal {
       newItem.id = uid();
       this.listsData.push(newItem);
 
-      set(
+      await set(
         ref(this.db, `${this.userId}/lists`),
         this.listsData.filter((item) => item !== null)
       );
@@ -136,7 +136,7 @@ class ListUserModal {
       const updates = {};
       updates[`${this.userId}/lists/${itemIndex}`] = newItem;
 
-      update(ref(this.db), updates);
+      await update(ref(this.db), updates);
     }
 
     document.dispatchEvent(new Event('changedList'));
