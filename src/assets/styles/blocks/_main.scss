@@ -61,7 +61,7 @@
     }
   }
   .main__tasks {
-      margin: 0 20px;
+    margin: 0 20px;
 
     &-header {
       display: flex;
@@ -73,6 +73,13 @@
       .divider {
         margin: auto 8px;
         height: 12px;
+      }
+    }
+
+    &-block {
+      &.empty {
+        padding: 32px 0;
+        text-align: center;
       }
     }
 

@@ -5,11 +5,15 @@ import formatDateToYYYYMMDD from '../../utils/formatDate';
 
 /* eslint-disable */
 class HTMLTasksUser {
-  public static getHtmlBlockTask(
-    htmlListTasks: string
-  ): string {
+  public static getHtmlBlockTask(htmlListTasks: string): string {
     return `<div class="main__tasks-block accordion-js">
         ${htmlListTasks}
+    </div>`;
+  }
+
+  public static getEmptyHtmlBlockTask(): string {
+    return `<div class="main__tasks-block empty accordion-js">
+        EMPTY!
     </div>`;
   }
 

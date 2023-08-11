@@ -141,7 +141,7 @@ class ListUser {
   private renderLists(list: List): string {
     /* eslint-disable */
     return `<li class="sidebar__lists-item list-item-js" data-id="${list.id}" >
-      <div class="sidebar__lists-button  make-filrer-js ${
+      <div class="sidebar__lists-button  make-filter-js ${
         list.id === getParamforUrl('listId') ? 'active' : ''
       }" data-filter="listId">
         <span class="sidebar__lists-name">${list.title}</span>

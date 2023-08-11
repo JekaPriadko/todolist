@@ -1,6 +1,15 @@
+import {
+  getFirestore,
+  collection,
+  query,
+  onSnapshot,
+} from 'firebase/firestore';
+import firebase from '../../firebase';
+
 import { setParamToUrl, getParamforUrl } from '../../utils/updateUrl';
-import filterInfo from '../../const/filter';
 import { List } from '../../entity/list';
+
+import { filterInfo, filterMapForCount } from '../../const/filter';
 
 type PossibleFilterStatus =
   | 'inbox'
@@ -25,7 +34,7 @@ export class FilterTask {
 
   constructor(listsData: Array<List>) {
     this.listsData = listsData;
-    this.filterBtnClass = '.make-filrer-js';
+    this.filterBtnClass = '.make-filter-js';
     this.pageTitle = document.querySelector('.main-title-js');
   }
 
@@ -87,6 +96,23 @@ export class FilterTask {
     });
   }
 
+  public static listenChangesCounFilter(user: string) {
+    const db = getFirestore(firebase);
+
+    Object.keys(filterMapForCount).forEach((filterKey) => {
+      const filterConditions = filterMapForCount[filterKey];
+      const q = query(collection(db, user), ...filterConditions);
+
+      onSnapshot(q, (querySnapshot) => {
+        const filterItem = document
+          .querySelector(`.make-filter-js[data-filter=${filterKey}]`)
+          .closest('.filter-item-js')
+          .querySelector('.filter-count-js') as HTMLElement;
+        filterItem.textContent = querySnapshot.size.toString();
+      });
+    });
+  }
+
   private setupActiveFilterFromUrl() {
     const filter = {
       filter: (getParamforUrl('filter') as PossibleFilterStatus) || 'inbox',
@@ -120,12 +146,12 @@ export class FilterTask {
     if (typeFilter !== 'listId') {
       newTitle = filterInfo[typeFilter].title;
       inboxFilterBtn = document.querySelector(
-        `.make-filrer-js[data-filter="${typeFilter}"]`
+        `.make-filter-js[data-filter="${typeFilter}"]`
       ) as HTMLElement;
     } else {
       const { listId } = fiter;
       inboxFilterBtn = document.querySelector(
-        `.list-item-js[data-id="${listId}"] .make-filrer-js`
+        `.list-item-js[data-id="${listId}"] .make-filter-js`
       ) as HTMLElement;
       newTitle = this.listsData.find((item) => item.id === listId)?.title;
     }

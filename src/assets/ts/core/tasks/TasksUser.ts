@@ -51,6 +51,8 @@ class TasksUser {
     await this.renderTasksList();
     this.handleRouteChange();
     this.addEventListeners();
+
+    FilterTask.listenChangesCounFilter(this.userId);
   }
 
   private addEventListeners() {
@@ -61,7 +63,6 @@ class TasksUser {
     });
 
     document.addEventListener('changedFilter', async () => {
-      deleteParamFromUrl('taskId');
       await this.renderTasksList();
       this.handleRouteChange();
     });
@@ -71,6 +72,11 @@ class TasksUser {
     this.filter = FilterTask.getActiveFilter();
 
     const allItems = await this.dataTask.getAllItems(this.filter);
+    if (allItems.length <= 0) {
+      this.tasksList.innerHTML =
+        HTMLTasksUser.getEmptyHtmlBlockTask();
+      return;
+    }
 
     const htmlListTasks = allItems
       .map((task) =>
@@ -146,6 +152,11 @@ class TasksUser {
   private handleRouteChange() {
     const itemId = getParamforUrl('taskId');
     const oneItem: Task = this.dataTask.getOneItem(itemId);
+
+    if (!oneItem) {
+      deleteParamFromUrl('taskId');
+    }
+
     this.setActiveClassForTask();
 
     /* eslint-disable */

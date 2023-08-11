@@ -14,8 +14,8 @@ import {
 
 import firebase from '../../firebase';
 import { Task } from '../../entity/task';
-
 import { FilterData } from './FilterTask';
+
 import generateDateFilter from '../../utils/generateDateFilter';
 
 class DataTasksUser {
