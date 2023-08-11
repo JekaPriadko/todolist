@@ -5,18 +5,18 @@ import { List } from '../../entity/list';
 type PossibleFilterStatus =
   | 'inbox'
   | 'today'
-  | 'tommorow'
+  | 'tomorrow'
   | 'week'
   | 'completed'
   | 'trash'
   | 'listId';
 
-type FilterData = {
+export type FilterData = {
   filter: PossibleFilterStatus;
   listId?: string;
 };
 
-class FilterTask {
+export class FilterTask {
   private filterBtnClass: string;
 
   private pageTitle: HTMLElement;
@@ -31,12 +31,23 @@ class FilterTask {
 
   public init() {
     this.addEventListeners();
-    this.setupActiveFilterFromUrl();
   }
 
   public updateListsData(listsData: Array<List>) {
     this.listsData = listsData;
     this.setupActiveFilterFromUrl();
+  }
+
+  public static getActiveFilter(): FilterData {
+    return {
+      filter: (getParamforUrl('filter') as PossibleFilterStatus) || 'inbox',
+      listId: getParamforUrl('listId'),
+    };
+  }
+
+  public resetAllFilter() {
+    setParamToUrl({ filter: 'inbox' });
+    this.setFilteredData({ filter: 'inbox' });
   }
 
   private addEventListeners() {
@@ -47,7 +58,10 @@ class FilterTask {
         const filterBtn = targetElement.closest(
           this.filterBtnClass
         ) as HTMLElement;
-        this.clearActiveFilterBtn();
+
+        if (filterBtn.classList.contains('active')) return;
+
+        this.clearAllActiveFilterBtn();
         this.setActiveFilterBtn(filterBtn);
 
         const statusFilter = filterBtn.getAttribute(
@@ -86,7 +100,7 @@ class FilterTask {
     btn.classList.add('active');
   }
 
-  private clearActiveFilterBtn() {
+  private clearAllActiveFilterBtn() {
     const filterBtn = Array.from(
       document.querySelectorAll(this.filterBtnClass)
     ) as Array<HTMLElement>;
@@ -96,14 +110,9 @@ class FilterTask {
     });
   }
 
-  public resetAllFilter() {
-    setParamToUrl({ filter: 'inbox' });
-    this.setFilteredData({ filter: 'inbox' });
-  }
-
   private setFilteredData(fiter: FilterData) {
     const typeFilter = fiter.filter;
-    this.clearActiveFilterBtn();
+    this.clearAllActiveFilterBtn();
 
     let newTitle: string;
     let inboxFilterBtn: HTMLElement;
@@ -129,6 +138,7 @@ class FilterTask {
 
     this.setActiveFilterBtn(inboxFilterBtn);
     this.pageTitle.textContent = newTitle;
+
+    document.dispatchEvent(new Event('changedFilter'));
   }
 }
-export default FilterTask;

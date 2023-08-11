@@ -5,8 +5,8 @@ export default {
   today: {
     title: 'Today',
   },
-  tommorow: {
-    title: 'Tommorow',
+  tomorrow: {
+    title: 'Tomorrow',
   },
   week: {
     title: 'Week',

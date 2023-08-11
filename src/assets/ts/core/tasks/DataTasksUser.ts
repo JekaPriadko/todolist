@@ -9,10 +9,14 @@ import {
   Timestamp,
   query,
   where,
+  Query,
 } from 'firebase/firestore';
 
 import firebase from '../../firebase';
 import { Task } from '../../entity/task';
+
+import { FilterData } from './FilterTask';
+import generateDateFilter from '../../utils/generateDateFilter';
 
 class DataTasksUser {
   private db: Firestore;
@@ -27,8 +31,13 @@ class DataTasksUser {
     this.db = getFirestore(firebase);
   }
 
-  public async getAllItems(): Promise<Array<Task>> {
-    const querySnapshot = await getDocs(collection(this.db, this.userId));
+  public async getAllItems(
+    filterData: FilterData
+  ): Promise<Array<Task>> | null {
+    const queryRequest = this.prepareQuery(filterData);
+    if (!queryRequest) return null;
+
+    const querySnapshot = await getDocs(queryRequest);
 
     this.allItems = querySnapshot.docs.map((task) => {
       const dueDate = task.data()?.dueDate;
@@ -47,13 +56,32 @@ class DataTasksUser {
       };
     });
 
-    this.allItems = this.allItems.filter((item) => item.trash !== true);
-
     return this.allItems.sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
       return dateB.getTime() - dateA.getTime();
     });
+  }
+
+  private prepareQuery(filterData: FilterData): Query | null {
+    const baseQuery = collection(this.db, this.userId);
+    const filterMap = {
+      inbox: [where('trash', '==', false), where('completed', '==', false)],
+      completed: [where('completed', '==', true), where('trash', '==', false)],
+      trash: [where('trash', '==', true)],
+      listId: [where('list', '==', filterData.listId)],
+      today: generateDateFilter(new Date(), 0, 1),
+      tomorrow: generateDateFilter(new Date(), 1, 1),
+      week: generateDateFilter(new Date(), 0, 7),
+    };
+
+    const filters = filterMap[filterData.filter];
+
+    if (!filters) {
+      return null;
+    }
+
+    return query(baseQuery, ...filters);
   }
 
   public getCountAllItems(): number {
@@ -97,7 +125,8 @@ class DataTasksUser {
     const q = query(
       collection(this.db, this.userId),
       where('list', '==', listId),
-      where('trash', '==', false)
+      where('trash', '==', false),
+      where('completed', '==', false)
     );
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.length;

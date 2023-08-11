@@ -5,6 +5,8 @@ import ListUser from '../list/ListUser';
 
 import { Task, Priority } from '../../entity/task';
 
+import { FilterTask, FilterData } from './FilterTask';
+
 import {
   setParamToUrl,
   getParamforUrl,
@@ -13,6 +15,8 @@ import {
 
 class TasksUser {
   private userId: string | null;
+
+  private filter: FilterData;
 
   private dataTask: DataTasksUser;
 
@@ -55,10 +59,18 @@ class TasksUser {
       await this.renderTasksList();
       this.handleRouteChange();
     });
+
+    document.addEventListener('changedFilter', async () => {
+      deleteParamFromUrl('taskId');
+      await this.renderTasksList();
+      this.handleRouteChange();
+    });
   }
 
   private async renderTasksList() {
-    const allItems = await this.dataTask.getAllItems();
+    this.filter = FilterTask.getActiveFilter();
+
+    const allItems = await this.dataTask.getAllItems(this.filter);
 
     const htmlListTasks = allItems
       .map((task) =>
@@ -70,8 +82,6 @@ class TasksUser {
       .join('');
 
     this.tasksList.innerHTML = HTMLTasksUser.getHtmlBlockTask(
-      'Inbox',
-      this.dataTask.getCountAllItems(),
       htmlListTasks
     );
 
@@ -113,6 +123,9 @@ class TasksUser {
           }
           await this.renderTasksList();
         } else {
+          const taskItem = targetElement.closest('.task-item-js');
+          if (taskItem.classList.contains('active')) return;
+
           this.clearActiveTasks();
           setParamToUrl({ taskId: itemId });
 

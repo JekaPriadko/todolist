@@ -10,18 +10,13 @@ import {
 
 import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
-import FilterTask from '../tasks/FilterTask';
+import { FilterTask } from '../tasks/FilterTask';
 
 import { List } from '../../entity/list';
 
 import { getParamforUrl } from '../../utils/updateUrl';
 
 class ListUser {
-  // eslint-disable-next-line
-  private readyResolver: any;
-
-  private readyPromise: Promise<void>;
-
   private db: Database;
 
   private userId: string | null;
@@ -52,12 +47,6 @@ class ListUser {
   }
 
   public async run() {
-    this.readyPromise = new Promise((resolve) => {
-      this.readyResolver = resolve;
-    });
-
-    // ================================================================
-
     const starCountRef = ref(this.db, `${this.userId}/lists`);
 
     await this.getOnceDataList();
@@ -68,20 +57,12 @@ class ListUser {
 
       this.prepareDataList(dataFirebase);
     });
-
-    // ================================================================
-
-    this.readyResolver();
   }
 
   private setupListeners() {
     document.addEventListener('changedTask', async () => {
       this.getOnceDataList();
     });
-  }
-
-  public isReadyList() {
-    return this.readyPromise;
   }
 
   private async getOnceDataList() {

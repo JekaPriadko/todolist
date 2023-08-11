@@ -61,16 +61,8 @@
     }
   }
   .main__tasks {
-    &-block {
-      &.hide {
-        .main__tasks-toggler {
-          transform: rotate(-90deg);
-        }
-        .main__tasks-list {
-          display: none;
-        }
-      }
-    }
+      margin: 0 20px;
+
     &-header {
       display: flex;
       align-items: center;
@@ -83,27 +75,12 @@
         height: 12px;
       }
     }
-    &-toggler {
-      margin-right: 4px;
-    }
-    &-title {
-      font-size: 12px;
-      line-height: 36px;
-    }
-    &-count {
-      font-size: 10px;
-      line-height: 36px;
-      color: rgb(var(--color-text-primary), 0.6);
-    }
-    &-list {
-    }
 
     &-item {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      margin: 0 12px;
-      padding: 6px 16px;
+      padding: 8px;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.15s ease;

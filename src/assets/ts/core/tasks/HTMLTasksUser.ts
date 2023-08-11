@@ -6,24 +6,10 @@ import formatDateToYYYYMMDD from '../../utils/formatDate';
 /* eslint-disable */
 class HTMLTasksUser {
   public static getHtmlBlockTask(
-    title: string,
-    count: number,
     htmlListTasks: string
   ): string {
     return `<div class="main__tasks-block accordion-js">
-      <div class="main__tasks-header accordion-toggler-js">
-        <button class="button button--icon button--sm-icon main__tasks-toggler">
-          <svg class="icon button__icon button__prepend-icon" aria-hidden="true">
-            <use xlink:href="/src/assets/images/sprite.svg#thin-triangle-down"></use>
-          </svg>
-        </button>
-        <span class="main__tasks-title">${title}</span>
-        <div class="divider divider--vertical"></div>
-        <span class="main__tasks-count">${count}</span>
-      </div>
-      <div class="main__tasks-list accordion-content-js">
         ${htmlListTasks}
-      </div>
     </div>`;
   }
 
