@@ -8,7 +8,7 @@ import {
 
 import errorText from '../const/errorText';
 import firebase from '../firebase';
-/* eslint-disable */
+
 class AuthUser {
   private authForms: HTMLElement | null;
 
@@ -19,10 +19,6 @@ class AuthUser {
   private authFormSignUp: HTMLElement | null;
 
   private authBtnSignOut: HTMLElement | null;
-
-  private authFormSignInError: HTMLElement | null;
-
-  private authFormSignUpError: HTMLElement | null;
 
   // eslint-disable-next-line
   private user: any;
@@ -40,8 +36,6 @@ class AuthUser {
     this.authFormSignIn = null;
     this.authFormSignUp = null;
     this.authBtnSignOut = null;
-    this.authFormSignInError = null;
-    this.authFormSignUpError = null;
     this.user = null;
     this.stateAuthForm = 'signin';
     this.readyPromise = new Promise((resolve) => {
@@ -68,7 +62,7 @@ class AuthUser {
     onAuthStateChanged(auth, (user) => {
       this.user = user;
       this.authViewHandler();
-
+      document.dispatchEvent(new Event('changeAuthState'));
       this.readyResolver();
     });
   }
@@ -95,31 +89,29 @@ class AuthUser {
   }
 
   private showAuthForm(): void {
-    if (!this.authForms) {
-      document.body.insertAdjacentHTML('beforeend', this.getAuthForm());
-      this.authForms = document.getElementById('auth');
+    document.body.insertAdjacentHTML('beforeend', this.getAuthForm());
+    this.authForms = document.getElementById('auth');
 
-      this.authFormToggle = this.authForms.querySelector(
-        '.auth-form-toggle-js'
-      ) as HTMLElement;
-      this.authFormToggle.addEventListener('click', () => {
-        this.toggleAuthForm();
-      });
+    this.authFormToggle = this.authForms.querySelector(
+      '.auth-form-toggle-js'
+    ) as HTMLElement;
+    this.authFormToggle.addEventListener('click', () => {
+      this.toggleAuthForm();
+    });
 
-      this.authFormSignIn = this.authForms.querySelector(
-        '.signin-form-js'
-      ) as HTMLFormElement;
-      this.authFormSignIn.addEventListener('submit', (e) =>
-        this.authSignInHandler(e)
-      );
+    this.authFormSignIn = this.authForms.querySelector(
+      '.signin-form-js'
+    ) as HTMLFormElement;
+    this.authFormSignIn.addEventListener('submit', (e) =>
+      this.authSignInHandler(e)
+    );
 
-      this.authFormSignUp = this.authForms.querySelector(
-        '.signup-form-js'
-      ) as HTMLFormElement;
-      this.authFormSignUp.addEventListener('submit', (e) =>
-        this.authSignUpHandler(e)
-      );
-    }
+    this.authFormSignUp = this.authForms.querySelector(
+      '.signup-form-js'
+    ) as HTMLFormElement;
+    this.authFormSignUp.addEventListener('submit', (e) =>
+      this.authSignUpHandler(e)
+    );
   }
 
   private removeAuthForm(): void {
@@ -129,17 +121,30 @@ class AuthUser {
     }
   }
 
-  private signOutUser(): void {
+  private async signOutUser(): Promise<void> {
     const auth = getAuth(firebase);
+
     try {
-      signOut(auth);
+      await signOut(auth);
+      const domainURL = window.location.origin;
+      window.location.href = domainURL;
     } catch (error) {
       console.log(error);
     }
   }
 
-  // TODO: this should refactor
-  private async authSignInHandler(e: Event): Promise<void> {
+  private authSignInHandler(e: Event): Promise<void> {
+    return this.handleAuthAction(e, 'signIn');
+  }
+
+  private authSignUpHandler(e: Event): Promise<void> {
+    return this.handleAuthAction(e, 'signUp');
+  }
+
+  private async handleAuthAction(
+    e: Event,
+    action: 'signIn' | 'signUp'
+  ): Promise<void> {
     e.preventDefault();
 
     const auth = getAuth(firebase);
@@ -147,58 +152,39 @@ class AuthUser {
     const target = e.target as HTMLFormElement;
     const email = target.querySelector('.auth__email') as HTMLInputElement;
     const password = target.querySelector('.auth__pass') as HTMLInputElement;
+    const authFormError = target.querySelector('.auth__error');
 
     try {
-      await signInWithEmailAndPassword(auth, email.value, password.value);
+      if (action === 'signIn') {
+        await signInWithEmailAndPassword(auth, email.value, password.value);
+        authFormError.innerHTML = '';
+      } else {
+        await createUserWithEmailAndPassword(auth, email.value, password.value);
+        authFormError.innerHTML = '';
+      }
     } catch (error) {
       const errorCode = error.code;
-      this.authFormSignInError = target.querySelector('.auth__error');
-      this.authFormSignInError.innerHTML = errorText(errorCode);
+      if (authFormError) {
+        authFormError.innerHTML = errorText(errorCode);
+      }
     }
   }
-
-  // TODO: this should refactor
-  private async authSignUpHandler(e: Event): Promise<void> {
-    e.preventDefault();
-
-    const auth = getAuth(firebase);
-
-    const target = e.target as HTMLFormElement;
-    const email = target.querySelector('.auth__email') as HTMLInputElement;
-    const password = target.querySelector('.auth__pass') as HTMLInputElement;
-
-    try {
-      await createUserWithEmailAndPassword(auth, email.value, password.value);
-    } catch (error) {
-      const errorCode = error.code;
-      this.authFormSignUpError = target.querySelector('.auth__error');
-      this.authFormSignUpError.innerHTML = errorText(errorCode);
-    }
-  }
-
 
   private toggleAuthForm(): void {
     if (this.authForms) {
-      switch (this.stateAuthForm) {
-        case 'signup': {
-          this.stateAuthForm = 'signin';
-          this.authForms.classList.add('signin');
-          this.authForms.classList.remove('signup');
-          this.authFormToggle.textContent = 'Register';
-          break;
-        }
+      this.stateAuthForm =
+        this.stateAuthForm === 'signin' ? 'signup' : 'signin';
+      this.authForms.classList.toggle(
+        'signin',
+        this.stateAuthForm === 'signin'
+      );
+      this.authForms.classList.toggle(
+        'signup',
+        this.stateAuthForm === 'signup'
+      );
 
-        case 'signin': {
-          this.stateAuthForm = 'signup';
-          this.authForms.classList.add('signup');
-          this.authForms.classList.remove('signin');
-          this.authFormToggle.textContent = 'Login';
-          break;
-        }
-
-        default:
-          break;
-      }
+      this.authFormToggle.textContent =
+        this.stateAuthForm === 'signin' ? 'Register' : 'Login';
     }
   }
 

@@ -1,4 +1,4 @@
-class Sidebar {
+class SidebarHandler {
   private isOpen: boolean;
 
   private sidebar: HTMLElement;
@@ -20,7 +20,9 @@ class Sidebar {
     this.pathSprite = this.sidebarToggleBtnIcon
       .getAttribute('xlink:href')
       .split('#')[0];
+  }
 
+  public run() {
     this.sidebarToggleBtn.addEventListener('click', () => {
       this.toggle();
     });
@@ -75,4 +77,4 @@ class Sidebar {
   }
 }
 
-export default Sidebar;
+export default SidebarHandler;

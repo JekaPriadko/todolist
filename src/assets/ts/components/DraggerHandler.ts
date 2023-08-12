@@ -1,4 +1,4 @@
-class DraggerLayout {
+class DraggerHandler {
   private content: HTMLElement | null;
 
   private sidebar: HTMLElement | null;
@@ -34,7 +34,9 @@ class DraggerLayout {
 
     this.minW = 260;
     this.maxWSidebar = 450;
+  }
 
+  public run() {
     if (this.sidebar && this.sidebarDragger) {
       this.sidebarDragger.addEventListener('mousedown', (e) =>
         this.handleMouseDown('sidebar', e)
@@ -122,4 +124,4 @@ class DraggerLayout {
   }
 }
 
-export default DraggerLayout;
+export default DraggerHandler;
