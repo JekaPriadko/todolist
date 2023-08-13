@@ -5,7 +5,7 @@ import ListUser from '../list/ListUser';
 
 import { Task, Priority } from '../../entity/task';
 
-import { FilterTask, FilterData } from './FilterTask';
+import { FilterTask, FilterData } from '../filter/FilterTask';
 
 import {
   setParamToUrl,
@@ -52,7 +52,7 @@ class TasksUser {
     this.handleRouteChange();
     this.addEventListeners();
 
-    FilterTask.listenChangesCounFilter(this.userId);
+    FilterTask.listenChangesCountFilter(this.userId);
   }
 
   private addEventListeners() {
@@ -69,7 +69,7 @@ class TasksUser {
   }
 
   private async renderTasksList() {
-    this.filter = FilterTask.getActiveFilter();
+    this.filter = FilterTask.getActiveFilterFromUrl();
 
     const allItems = await this.dataTask.getAllItems(this.filter);
     if (allItems.length <= 0) {

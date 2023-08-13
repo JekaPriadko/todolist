@@ -12,7 +12,7 @@
   transition: all 0.35s ease;
 
   @include media-up(500px) {
-    border-left: 3px solid rgba(var(--color-border), 0.1);
+    border-left: 3px solid rgba(var(--color-border) / 10%);
   }
 
   @include media-up(960px) {
@@ -30,6 +30,7 @@
 
   .details__dragger {
     display: none;
+
     @include media-up(960px) {
       display: block;
     }
@@ -51,7 +52,7 @@
 
   .details__header {
     width: 100%;
-    border-bottom: 2px solid rgba(var(--color-border), 0.1);
+    border-bottom: 2px solid rgba(var(--color-border) / 10%);
     padding: 20px;
     display: flex;
     align-items: center;
@@ -60,6 +61,7 @@
     &-close {
       flex-shrink: 0;
       margin-right: 8px;
+
       @include media-up(960px) {
         display: none;
       }
@@ -69,9 +71,11 @@
       flex-shrink: 0;
       margin-right: 8px;
     }
+
     &-date {
       margin-left: 8px;
     }
+
     &-priority {
       flex-shrink: 0;
       margin-left: auto;
@@ -91,6 +95,7 @@
       margin-bottom: 12px;
       width: 100%;
     }
+
     &-input {
       width: 100%;
       height: 100%;
@@ -101,7 +106,7 @@
 
   .details__footer {
     width: 100%;
-    border-top: 2px solid rgba(var(--color-border), 0.1);
+    border-top: 2px solid rgba(var(--color-border) / 10%);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -115,27 +120,32 @@
     align-items: center;
     justify-content: center;
     padding: 0 12px 100px;
+
     &-img {
       position: relative;
       height: 160px;
+
       svg {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        fill: currentColor;
+        fill: currentcolor;
+
         &:first-of-type {
-          color: rgba(var(--color-dark), 0.1);
+          color: rgba(var(--color-dark) / 10%);
         }
+
         &:last-of-type {
           color: rgb(var(--color-primary));
         }
       }
     }
+
     &-title {
       font-size: 16px;
       line-height: 20px;
-      color: rgba(var(--color-text-primary), 0.6);
+      color: rgba(var(--color-text-primary) / 60%);
       margin-top: 40px;
       text-align: center;
     }

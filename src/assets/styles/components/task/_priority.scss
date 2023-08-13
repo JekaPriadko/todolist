@@ -1,19 +1,10 @@
 .priority {
   position: relative;
 
-  &.active {
-    .priority__list {
-      display: block;
-    }
-  }
-
-  .priority__btn {
-  }
-
   .priority__list {
     position: absolute;
-    background-color: rgba(var(--color-main-bg), 1);
-    border: 2px solid rgba(var(--color-border), 0.1);
+    background-color: rgba(var(--color-main-bg) / 100%);
+    border: 2px solid rgba(var(--color-border) / 10%);
     border-radius: 4px;
     padding: 6px;
     z-index: 100;
@@ -23,6 +14,12 @@
     display: none;
   }
 
+  &.active {
+    .priority__list {
+      display: block;
+    }
+  }
+
   .priority__item {
     margin-bottom: 4px;
     cursor: pointer;
@@ -30,20 +27,11 @@
     padding: 2px;
 
     &:hover {
-      background: rgba(var(--color-text-primary), 0.1);
+      background: rgba(var(--color-text-primary) / 10%);
     }
 
     &:last-of-type {
       margin-bottom: 0;
     }
-  }
-
-  &.priority-0 {
-  }
-  &.priority-1 {
-  }
-  &.priority-2 {
-  }
-  &.priority-3 {
   }
 }

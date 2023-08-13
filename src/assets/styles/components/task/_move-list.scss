@@ -1,19 +1,10 @@
 .move-list {
   position: relative;
 
-  &.active {
-    .move-list__lists {
-      display: block;
-    }
-  }
-
-  .move-list__btn {
-  }
-
   .move-list__lists {
     position: absolute;
-    background-color: rgba(var(--color-main-bg), 1);
-    border: 2px solid rgba(var(--color-border), 0.1);
+    background-color: rgba(var(--color-main-bg) / 100%);
+    border: 2px solid rgba(var(--color-border) / 10%);
     border-radius: 4px;
     z-index: 100;
     bottom: -10px;
@@ -25,12 +16,14 @@
     padding: 8px 0;
     max-height: 170px;
     overflow: scroll;
-    &.top{
+
+    &.top {
       bottom: auto;
       top: -12px;
       transform: translate(0, -100%);
     }
-    &.left{
+
+    &.left {
       right: auto;
       left: 0;
     }
@@ -48,12 +41,19 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+
     &:hover {
-      background: rgba(var(--color-text-primary), 0.1);
+      background: rgba(var(--color-text-primary) / 10%);
     }
 
     &:last-of-type {
       margin-bottom: 0;
+    }
+  }
+
+  &.active {
+    .move-list__lists {
+      display: block;
     }
   }
 }

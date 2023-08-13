@@ -3,10 +3,12 @@
   height: 22px;
   position: relative;
   cursor: pointer;
-  color: rgba(var(--color-text-primary), 0.4);
+  color: rgba(var(--color-text-primary) / 40%);
+
   &:hover{
-    color: rgba(var(--color-text-primary), 0.6);
+    color: rgba(var(--color-text-primary) / 60%);
   }
+
   .delete__item {
     position: absolute;
     top: 50%;
@@ -27,6 +29,7 @@
       opacity: 0;
       visibility: hidden;
     }
+
     .delete__restore {
       opacity: 1;
       visibility: visible;

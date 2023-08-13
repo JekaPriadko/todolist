@@ -2,14 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(var(--color-text-primary), 0.4);
+  color: rgba(var(--color-text-primary) / 40%);
   cursor: pointer;
   transition: all 0.35s ease;
   padding: 2px 4px;
   border-radius: 4px;
 
   &:hover {
-    background: rgba(var(--color-text-primary), 0.1);
+    background: rgba(var(--color-text-primary) / 10%);
   }
 
   .button__icon {
@@ -25,23 +25,21 @@
     margin-left: 4px;
   }
 
-  .button__text {
-  }
-
   &--save {
     background: rgb(var(--color-primary));
     color: rgb(var(--color-text-primary));
     padding: 10px;
     font-size: 16px;
     line-height: 20px;
+
     &:hover {
-      background: rgba(var(--color-primary), 0.8);
+      background: rgba(var(--color-primary) / 80%);
     }
   }
 
   &--cancel {
     background: transparent;
-    border: 2px solid rgba(var(--color-border), 0.1);
+    border: 2px solid rgba(var(--color-border) / 10%);
     color: rgb(var(--color-text-primary));
     padding: 10px;
     font-size: 16px;

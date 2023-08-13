@@ -15,7 +15,7 @@
 
   &.checkbox--priority-0 {
     .checkbox__btn {
-      color: rgb(var(--color-text-primary), 0.4);
+      color: rgb(var(--color-text-primary) / 40%);
     }
   }
 
@@ -37,17 +37,6 @@
     }
   }
 
-  &.completed {
-    .checkbox__item {
-      opacity: 0;
-      visibility: hidden;
-    }
-    .checkbox__completed {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
   .checkbox__item {
     position: absolute;
     top: 50%;
@@ -61,5 +50,17 @@
   .checkbox__main {
     opacity: 1;
     visibility: visible;
+  }
+
+  &.completed {
+    .checkbox__item {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .checkbox__completed {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }

@@ -13,9 +13,10 @@
   &.hide {
     display: none;
   }
+
   &--inside {
     position: absolute;
-    background: rgba(var(--color-main-bg), 0.9);
+    background: rgba(var(--color-main-bg) / 90%);
   }
 
   .preloader__loader {
@@ -23,7 +24,7 @@
     width: 80px;
     height: 80px;
 
-    &:after {
+    &::after {
       content: '';
       display: block;
       width: 64px;
@@ -42,6 +43,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

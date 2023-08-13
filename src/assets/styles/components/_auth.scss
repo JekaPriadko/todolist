@@ -1,16 +1,4 @@
 .auth {
-  &.signin {
-    .auth__signin {
-      display: block;
-    }
-  }
-
-  &.signup {
-    .auth__signup {
-      display: block;
-    }
-  }
-
   .auth__wrap {
     position: fixed;
     top: 0;
@@ -30,7 +18,7 @@
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
-    border: 2px solid rgba(var(--color-border), 0.1);
+    border: 2px solid rgba(var(--color-border) / 10%);
     background: rgb(var(--color-left-sidebar-bg));
     display: flex;
     align-items: flex-start;
@@ -42,10 +30,24 @@
     display: none;
     width: 100%;
   }
+
   .auth__signup {
     display: none;
     width: 100%;
   }
+
+  &.signin {
+    .auth__signin {
+      display: block;
+    }
+  }
+
+  &.signup {
+    .auth__signup {
+      display: block;
+    }
+  }
+
   .auth__form {
     display: flex;
     align-items: flex-start;
@@ -53,21 +55,24 @@
     flex-direction: column;
     width: 100%;
   }
+
   .auth__input {
     width: 100%;
     padding: 12px;
     margin-bottom: 12px;
-    border: 1px solid rgba(var(--color-border), 0.1);
+    border: 1px solid rgba(var(--color-border) / 10%);
     border-radius: 4px;
     font-size: 14px;
     line-height: 16px;
     transition: all 0.35s ease;
+
     &:hover {
-      border: 1px solid rgba(var(--color-border), 0.2);
+      border: 1px solid rgba(var(--color-border) / 20%);
     }
+
     &:focus,
     &:active {
-      border: 1px solid rgba(var(--color-border), 0.3);
+      border: 1px solid rgba(var(--color-border) / 30%);
     }
   }
 
@@ -83,26 +88,27 @@
     font-size: 16px;
     line-height: 20px;
     letter-spacing: 1px;
-    color: rgba(var(--color-text-primary), 0.8);
+    color: rgba(var(--color-text-primary) / 80%);
 
     &:hover {
-      background: rgba(var(--color-primary), 0.8);
-      color: rgba(var(--color-text-primary), 1);
+      background: rgba(var(--color-primary) / 80%);
+      color: rgba(var(--color-text-primary) / 100%);
     }
   }
+
   .auth__toggle {
     margin: 24px auto 0;
     text-align: center;
     cursor: pointer;
-    color: rgba(var(--color-text-primary), 0.4);
+    color: rgba(var(--color-text-primary) / 40%);
     transition: all 0.35s ease;
 
     &:hover {
-      color: rgba(var(--color-text-primary), 0.6);
+      color: rgba(var(--color-text-primary) / 60%);
     }
   }
 
-  .auth__error{
+  .auth__error {
     color: rgb(var(--color-error));
     margin-bottom: 12px;
   }

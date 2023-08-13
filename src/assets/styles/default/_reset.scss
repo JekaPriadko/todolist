@@ -1,7 +1,8 @@
 * {
   box-sizing: border-box;
-  &:before,
-  &:after{
+
+  &::before,
+  &::after{
     box-sizing: border-box;
   }
 }
@@ -53,7 +54,7 @@ input, textarea, select {
 }
 
 legend {
-  color: #000000;
+  color: #000;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {

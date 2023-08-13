@@ -5,7 +5,7 @@
   overflow-y: auto;
 
   @include media-up(960px) {
-    border-right: 2px solid rgba(var(--color-border), 0.1);
+    border-right: 2px solid rgba(var(--color-border) / 10%);
   }
 
   .main__header {
@@ -16,12 +16,12 @@
   }
 
   .main__collapse {
-    color: rgba(var(--color-text-primary), 0.6);
+    color: rgba(var(--color-text-primary) / 60%);
     margin-right: 12px;
   }
 
   .main__title {
-    color: rgba(var(--color-text-primary), 0.6);
+    color: rgba(var(--color-text-primary) / 60%);
     font-size: 24px;
     line-height: 32px;
     font-weight: 400;
@@ -36,7 +36,7 @@
   .main__create-input {
     width: 100%;
     padding: 12px 142px 12px 12px;
-    background: rgba(var(--color-text-primary), 0.05);
+    background: rgba(var(--color-text-primary) / 5%);
     color: rgb(var(--color-text-primary));
     border-radius: 4px;
     border: 2px solid transparent;
@@ -55,11 +55,13 @@
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
+
     .divider {
       margin: 0 8px;
       height: auto;
     }
   }
+
   .main__tasks {
     margin: 0 20px;
 
@@ -70,6 +72,7 @@
       cursor: pointer;
       padding: 0 12px;
       height: 36px;
+
       .divider {
         margin: auto 8px;
         height: 12px;
@@ -94,20 +97,21 @@
       position: relative;
       border-left: 2px solid transparent;
 
-      &:after {
+      &::after {
         content: '';
         width: calc(100% - 44px);
         height: 1px;
-        background: rgba(var(--color-border), 0.05);
+        background: rgba(var(--color-border) / 5%);
         position: absolute;
         bottom: 0;
         right: 0;
         transition: all 0.15s ease;
       }
-      &:hover {
-        background: rgba(var(--color-text-primary), 0.05);
 
-        &:after {
+      &:hover {
+        background: rgb(var(--color-text-primary) / 5%);
+
+        &::after {
           opacity: 0;
         }
 
@@ -118,15 +122,18 @@
       }
 
       &.active {
-        background: rgba(var(--color-text-primary), 0.2);
+        background: rgba(var(--color-text-primary) / 20%);
       }
     }
+
     &-checkbox {
       margin-right: 8px;
     }
+
     &-name {
       margin-right: 12px;
     }
+
     &-delete {
       margin-left: auto;
       opacity: 0;

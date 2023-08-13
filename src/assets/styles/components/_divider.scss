@@ -1,7 +1,7 @@
 .divider {
   height: 1px;
   margin: 8px;
-  background: rgba(var(--color-border), 0.1);
+  background: rgba(var(--color-border) / 10%);
 
   &--vertical{
     width: 1px;

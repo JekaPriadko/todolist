@@ -10,7 +10,7 @@ import {
 
 import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
-import { FilterTask } from '../tasks/FilterTask';
+import { FilterTask } from '../filter/FilterTask';
 
 import { List } from '../../entity/list';
 
