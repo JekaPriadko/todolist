@@ -1,4 +1,4 @@
-import BaseTaskComponent from './BaseTaskComponent';
+import { BaseTaskComponent, PossibleNewValues } from './BaseTaskComponent';
 
 class DueDate extends BaseTaskComponent {
   private blockInput: string;
@@ -45,8 +45,10 @@ class DueDate extends BaseTaskComponent {
     });
   }
 
-  public setBlock(element, newValue): void {
-    const dateInput = element.querySelector(this.blockInput) as HTMLInputElement;
+  public setBlock(element: HTMLElement, newValue: PossibleNewValues): void {
+    const dateInput = element.querySelector(
+      this.blockInput
+    ) as HTMLInputElement;
     const dateText = element.querySelector('.due-date-text-js') as HTMLElement;
 
     if (newValue) {
@@ -57,7 +59,7 @@ class DueDate extends BaseTaskComponent {
     }
 
     if (dateText) {
-      dateText.textContent = newValue || 'Due Date';
+      dateText.textContent = newValue as string || 'Due Date';
     }
   }
 }

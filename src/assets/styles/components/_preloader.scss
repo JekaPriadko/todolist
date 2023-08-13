@@ -31,8 +31,8 @@
       margin: 8px;
       border-radius: 50%;
       border: 6px solid rgb(var(--color-primary));
-      border-color: rgb(var(--color-primary)) transparent
-        rgb(var(--color-primary)) transparent;
+      border-right-color: transparent;
+      border-left-color: transparent;
       animation: lds-dual-ring 1.2s linear infinite;
     }
   }

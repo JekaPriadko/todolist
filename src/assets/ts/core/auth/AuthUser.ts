@@ -4,10 +4,13 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  User
 } from 'firebase/auth';
 
-import errorText from '../const/errorText';
-import firebase from '../firebase';
+import errorText from '../../const/errorText';
+import firebase from '../../firebase';
+
+type StateAuthForm = 'signin' | 'signup';
 
 class AuthUser {
   private authForms: HTMLElement | null;
@@ -20,15 +23,14 @@ class AuthUser {
 
   private authBtnSignOut: HTMLElement | null;
 
-  // eslint-disable-next-line
-  private user: any;
+  private user: User;
 
-  private stateAuthForm: 'signin' | 'signup';
+  private stateAuthForm: StateAuthForm;
 
   // eslint-disable-next-line
   private readyResolver: any;
 
-  private readyPromise: Promise<void>;
+  private readonly readyPromise: Promise<void>;
 
   constructor() {
     this.authForms = null;
@@ -165,6 +167,7 @@ class AuthUser {
     } catch (error) {
       const errorCode = error.code;
       if (authFormError) {
+        console.log(errorCode);
         authFormError.innerHTML = errorText(errorCode);
       }
     }

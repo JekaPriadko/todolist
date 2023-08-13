@@ -17,21 +17,21 @@ import { List } from '../../entity/list';
 import { getParamforUrl } from '../../utils/updateUrl';
 
 class ListUser {
-  private db: Database;
+  private readonly db: Database;
 
   private userId: string | null;
 
   private listsData: Array<List> = [];
 
-  private dataTask: DataTasksUser;
+  private readonly dataTask: DataTasksUser;
 
-  private filterTask: FilterTask;
+  private readonly filterTask: FilterTask;
 
-  private modalAddList: ListUserModal;
+  private readonly modalAddList: ListUserModal;
 
-  private listBlock: HTMLElement | null;
+  private readonly listBlock: HTMLElement | null;
 
-  constructor(userId) {
+  constructor(userId: string) {
     this.userId = userId;
     this.db = getDatabase();
 
@@ -76,7 +76,7 @@ class ListUser {
       });
   }
 
-  private async prepareDataList(dataFirebase) {
+  private async prepareDataList(dataFirebase: List[]) {
     this.listsData = dataFirebase;
 
     const promises = this.listsData.map(async (list) => ({
@@ -108,11 +108,7 @@ class ListUser {
         const isEdit = targetElement.closest('.sidebar__lists-edit');
         if (isEdit) {
           e.stopPropagation();
-          this.modalAddList.setStatusModal('update');
-          this.modalAddList.setupDataModal(
-            this.listsData.find((elem) => elem.id === listId)
-          );
-          this.modalAddList.showAddModal();
+          this.editListItem(listId);
           return;
         }
 
@@ -123,6 +119,14 @@ class ListUser {
         }
       });
     });
+  }
+
+  private editListItem(listId: string) {
+    this.modalAddList.setStatusModal('update');
+    this.modalAddList.setupDataModal(
+      this.listsData.find((elem) => elem.id === listId)
+    );
+    this.modalAddList.showAddModal();
   }
 
   private async deleteListItem(listId: string) {
@@ -170,7 +174,7 @@ class ListUser {
     /* eslint-enable */
   }
 
-  public static getLists(listUserInstance): Array<List> {
+  public static getLists(listUserInstance: ListUser): Array<List> {
     return listUserInstance.listsData;
   }
 

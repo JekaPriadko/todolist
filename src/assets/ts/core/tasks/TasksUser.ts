@@ -14,13 +14,13 @@ import {
 } from '../../utils/updateUrl';
 
 class TasksUser {
-  private userId: string | null;
+  private readonly userId: string | null;
 
   private filter: FilterData;
 
-  private dataTask: DataTasksUser;
+  private readonly dataTask: DataTasksUser;
 
-  private tasksList: HTMLElement | null;
+  private readonly tasksList: HTMLElement | null;
 
   private taskItems: NodeListOf<HTMLElement> | null;
 
@@ -73,8 +73,7 @@ class TasksUser {
 
     const allItems = await this.dataTask.getAllItems(this.filter);
     if (allItems.length <= 0) {
-      this.tasksList.innerHTML =
-        HTMLTasksUser.getEmptyHtmlBlockTask();
+      this.tasksList.innerHTML = HTMLTasksUser.getEmptyHtmlBlockTask();
       return;
     }
 
@@ -87,9 +86,7 @@ class TasksUser {
       )
       .join('');
 
-    this.tasksList.innerHTML = HTMLTasksUser.getHtmlBlockTask(
-      htmlListTasks
-    );
+    this.tasksList.innerHTML = HTMLTasksUser.getHtmlBlockTask(htmlListTasks);
 
     this.handleClickTask();
   }

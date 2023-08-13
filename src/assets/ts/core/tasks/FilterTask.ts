@@ -26,9 +26,9 @@ export type FilterData = {
 };
 
 export class FilterTask {
-  private filterBtnClass: string;
+  private readonly filterBtnClass: string;
 
-  private pageTitle: HTMLElement;
+  private readonly pageTitle: HTMLElement;
 
   private listsData: Array<List>;
 

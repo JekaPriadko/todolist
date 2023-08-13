@@ -1,6 +1,6 @@
 import './assets/styles/index.scss';
 
-import AuthUser from './assets/ts/core/AuthUser';
+import AuthUser from './assets/ts/core/auth/AuthUser';
 import TasksUser from './assets/ts/core/tasks/TasksUser';
 import ListUser from './assets/ts/core/list/ListUser';
 

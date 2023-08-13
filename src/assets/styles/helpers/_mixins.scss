@@ -1,5 +1,5 @@
 /* =============================
-			Миксин для шрифтов
+        Mixin for font
 ============================= */
 
 @mixin font-face($font-family, $file-path, $weight: normal, $style: normal) {
@@ -8,14 +8,13 @@
     font-weight: $weight;
     font-style: $style;
     font-display: swap;
-    src: local("#{$font-family}"),
-      url("#{$file-path}.woff") format("woff"),
-      url("#{$file-path}.woff2") format("woff2")
+    src: local('#{$font-family}'), url('#{$file-path}.woff') format('woff'),
+      url('#{$file-path}.woff2') format('woff2');
   }
 }
 
 /* =============================
-		Миксин для медиазапросов
+        Mixin for media
 ============================= */
 
 @mixin media-up($width) {

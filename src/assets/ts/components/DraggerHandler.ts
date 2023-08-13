@@ -1,13 +1,14 @@
+type TypeDraggerBlock = 'sidebar' | 'details';
 class DraggerHandler {
-  private content: HTMLElement | null;
+  private readonly content: HTMLElement | null;
 
-  private sidebar: HTMLElement | null;
+  private readonly sidebar: HTMLElement | null;
 
-  private details: HTMLElement | null;
+  private readonly details: HTMLElement | null;
 
-  private sidebarDragger: HTMLElement | null;
+  private readonly sidebarDragger: HTMLElement | null;
 
-  private detailsDragger: HTMLElement | null;
+  private readonly detailsDragger: HTMLElement | null;
 
   private isResizingSidebar: boolean;
 
@@ -55,7 +56,7 @@ class DraggerHandler {
     window.addEventListener('resize', () => this.handleMinWidthContent());
   }
 
-  private handleMouseDown(block: 'sidebar' | 'details', e: MouseEvent) {
+  private handleMouseDown(block: TypeDraggerBlock, e: MouseEvent) {
     if (block === 'sidebar') {
       this.isResizingSidebar = true;
     } else if (block === 'details') {

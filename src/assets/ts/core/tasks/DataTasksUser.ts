@@ -19,13 +19,13 @@ import { FilterData } from './FilterTask';
 import generateDateFilter from '../../utils/generateDateFilter';
 
 class DataTasksUser {
-  private db: Firestore;
+  private readonly db: Firestore;
 
   private userId: string | null;
 
   private allItems: Array<Task>;
 
-  constructor(userId) {
+  constructor(userId:string) {
     this.userId = userId;
 
     this.db = getFirestore(firebase);

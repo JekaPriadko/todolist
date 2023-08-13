@@ -1,4 +1,4 @@
-import BaseTaskComponent from './BaseTaskComponent';
+import { BaseTaskComponent } from './BaseTaskComponent';
 
 import ListUser from '../../core/list/ListUser';
 import { List } from '../../entity/list';
@@ -56,23 +56,23 @@ class ListHandler extends BaseTaskComponent {
     });
   }
 
-  public setBlock(element, newValue): void {
+  public setBlock(element: HTMLElement, newValue: List): void {
     const listInput = element.querySelector(
       this.blockInput
     ) as HTMLInputElement;
-    listInput.value = newValue?.id || null;
+    listInput.value = (newValue?.id as string) || null;
 
     const listBtn = element.querySelector(
       '.move-list-show-js'
     ) as HTMLInputElement;
-    listBtn.style.color = newValue?.color || null;
+    listBtn.style.color = (newValue?.color as string) || null;
 
     const listTite = element.querySelector(
       '.move-list-title-js'
     ) as HTMLInputElement;
 
     if (listTite) {
-      listTite.textContent = newValue?.title || 'Inbox';
+      listTite.textContent = (newValue?.title as string) || 'Inbox';
     }
 
     this.hideAllDropdown();

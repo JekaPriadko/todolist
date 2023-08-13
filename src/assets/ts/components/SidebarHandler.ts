@@ -1,15 +1,15 @@
 class SidebarHandler {
   private isOpen: boolean;
 
-  private sidebar: HTMLElement;
+  private readonly sidebar: HTMLElement;
 
-  private mainLayout: HTMLElement;
+  private readonly mainLayout: HTMLElement;
 
-  private sidebarToggleBtn: HTMLElement;
+  private readonly sidebarToggleBtn: HTMLElement;
 
-  private sidebarToggleBtnIcon: SVGUseElement;
+  private readonly sidebarToggleBtnIcon: SVGUseElement;
 
-  private pathSprite: string;
+  private readonly pathSprite: string;
 
   constructor() {
     this.sidebar = document.getElementById('sidebar');

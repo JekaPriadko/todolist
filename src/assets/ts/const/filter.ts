@@ -1,4 +1,4 @@
-import { where } from 'firebase/firestore';
+import { where, QueryFieldFilterConstraint } from 'firebase/firestore';
 
 import generateDateFilter from '../utils/generateDateFilter';
 
@@ -22,8 +22,7 @@ export const filterInfo = {
     title: 'Trash',
   },
 };
-
-export const filterMapForCount = {
+export const filterMapForCount: Record<string, QueryFieldFilterConstraint[]> = {
   inbox: [where('trash', '==', false), where('completed', '==', false)],
   today: generateDateFilter(new Date(), 0, 1),
   tomorrow: generateDateFilter(new Date(), 1, 1),

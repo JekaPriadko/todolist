@@ -7,21 +7,21 @@ import { List } from '../../entity/list';
 type PossibleModalStatus = 'update' | 'create';
 
 class ListUserModal {
-  private db: Database;
+  private readonly db: Database;
 
-  private userId: string | null;
+  private userId: string;
 
   private listsData: Array<List> = [];
 
-  private modal: HTMLElement | null;
+  private readonly modal: HTMLElement | null;
 
-  private modalForm: HTMLFormElement | null;
+  private readonly modalForm: HTMLFormElement | null;
 
-  private modalFormColorField: HTMLInputElement | null;
+  private readonly modalFormColorField: HTMLInputElement | null;
 
-  private modalFormTitleField: HTMLInputElement | null;
+  private readonly modalFormTitleField: HTMLInputElement | null;
 
-  private modalCloseBtn: NodeListOf<HTMLElement> | null;
+  private readonly modalCloseBtn: NodeListOf<HTMLElement> | null;
 
   private isActiveInputColor = false;
 
@@ -29,7 +29,7 @@ class ListUserModal {
 
   private updateListItemId: string | null;
 
-  constructor(userId: string | null, db: Database, listsData: Array<List>) {
+  constructor(userId: string, db: Database, listsData: Array<List>) {
     this.userId = userId;
     this.db = db;
     this.listsData = listsData;
@@ -133,7 +133,7 @@ class ListUserModal {
         (item) => item.id === this.updateListItemId
       );
 
-      const updates = {};
+      const updates: Record<string, List> = {};
       updates[`${this.userId}/lists/${itemIndex}`] = newItem;
 
       await update(ref(this.db), updates);

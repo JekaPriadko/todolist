@@ -1,8 +1,8 @@
 import { List } from '../../entity/list';
 
-type PossibleNewValues = string | number | List | null;
+export type PossibleNewValues = string | number | List | null;
 
-abstract class BaseHandler {
+export abstract class BaseTaskComponent {
   public block: string | null;
 
   constructor() {
@@ -30,5 +30,3 @@ abstract class BaseHandler {
     newValue: PossibleNewValues
   ): void;
 }
-
-export default BaseHandler;

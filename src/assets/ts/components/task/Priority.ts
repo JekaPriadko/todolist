@@ -1,4 +1,4 @@
-import BaseTaskComponent from './BaseTaskComponent';
+import { BaseTaskComponent, PossibleNewValues } from './BaseTaskComponent';
 
 class PriorityHandler extends BaseTaskComponent {
   private blockSetBtn: string;
@@ -47,13 +47,13 @@ class PriorityHandler extends BaseTaskComponent {
     });
   }
 
-  public setBlock(element, newValue): void {
+  public setBlock(element: HTMLElement, newValue: PossibleNewValues): void {
     const prepareNewValue = newValue || '0';
 
     const priorityInput = element.querySelector(
       this.blockInput
     ) as HTMLInputElement;
-    priorityInput.value = prepareNewValue;
+    priorityInput.value = prepareNewValue as string;
 
     const priorityShowBtnSvg = element.querySelector('.priority-show-js use');
 
