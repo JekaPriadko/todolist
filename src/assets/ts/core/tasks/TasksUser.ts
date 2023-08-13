@@ -34,7 +34,7 @@ class TasksUser {
 
   private formDetailsTask: HTMLElement | null;
 
-  constructor(userId, listHandler: ListUser) {
+  constructor(userId: string, listHandler: ListUser) {
     this.userId = userId;
 
     this.listHandler = listHandler;
@@ -208,63 +208,62 @@ class TasksUser {
     }
   }
 
-  /* eslint-disable */
   private async updateTask(e: SubmitEvent, oneItem: Task): Promise<void> {
     e.preventDefault();
-    const target = e.target as HTMLFormElement;
-    const formData = new FormData(target);
-
-    const dueDateValue = formData.get('due-date') as string;
-    const dueDate = dueDateValue ? new Date(dueDateValue) : null;
-
-    const newOneItem: Task = {
-      ...oneItem,
-      title: formData.get('title') as string,
-      description: (formData.get('description') as string) || '',
-      priority: Number(formData.get('priority')) as Priority,
-      completed: formData.get('completed') === 'on',
-      list: (formData.get('move-list') as string) || null,
-      dueDate: dueDate,
-    };
+    const newOneItem = this.extractFormData(
+      e.target as HTMLFormElement,
+      oneItem
+    );
 
     const resUpdate = await this.dataTask.updateItem(newOneItem);
 
     if (resUpdate) {
-      deleteParamFromUrl('taskId');
-      await this.renderTasksList();
-      this.handleRouteChange();
-
-      document.dispatchEvent(new Event('changedTask'));
+      this.performTasksUpdate();
     }
   }
 
   private async createTask(e: SubmitEvent): Promise<void> {
     e.preventDefault();
-    const target = e.target as HTMLFormElement;
+    const newOneItem = this.extractFormData(e.target as HTMLFormElement);
+
+    const addedItems = await this.dataTask.createItem(newOneItem);
+
+    if (addedItems) {
+      this.performTasksAdd(e.target as HTMLFormElement);
+    }
+  }
+
+  private extractFormData(target: HTMLFormElement, oneItem?: Task): Task {
     const formData = new FormData(target);
 
     const dueDateValue = formData.get('due-date') as string;
     const dueDate = dueDateValue ? new Date(dueDateValue) : null;
 
-    const newOneItem: Task = {
-      createdAt: new Date(),
+    return {
+      ...oneItem,
+      createdAt: oneItem ? oneItem.createdAt : new Date(),
       title: formData.get('title') as string,
-      description: null,
-      completed: false,
+      description: (formData.get('description') as string) || '',
+      completed: formData.get('completed') === 'on',
       trash: false,
       list: (formData.get('move-list') as string) || null,
-      dueDate: dueDate,
       priority: Number(formData.get('priority')) as Priority,
+      dueDate,
     };
+  }
 
-    const addedItems = await this.dataTask.createItem(newOneItem);
+  private async performTasksUpdate() {
+    deleteParamFromUrl('taskId');
+    await this.renderTasksList();
+    this.handleRouteChange();
+    document.dispatchEvent(new Event('changedTask'));
+  }
 
-    if (addedItems) {
-      target.reset();
-      this.renderTasksList();
-      document.dispatchEvent(new Event('resetMainForm'));
-      document.dispatchEvent(new Event('changedTask'));
-    }
+  private async performTasksAdd(form: HTMLFormElement) {
+    form.reset();
+    await this.renderTasksList();
+    document.dispatchEvent(new Event('resetMainForm'));
+    document.dispatchEvent(new Event('changedTask'));
   }
 }
 

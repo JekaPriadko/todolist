@@ -33,7 +33,7 @@ export class FilterTask {
 
   private pageTitle: HTMLElement;
 
-  private constructor(listsData: Array<List>) {
+  public constructor(listsData: Array<List>) {
     this.listsData = listsData;
     this.filterBtnClass = '.make-filter-js';
     this.pageTitle = document.querySelector('.main-title-js');
