@@ -31,6 +31,17 @@ class TaskManager {
     new ListHandler(this.listUser).run();
     new PriorityHandler().run();
     new DueDate().run();
+
+    // ================================================
+
+    this.listUser.subscribe('changedList', async () => {
+      await this.tasksUser.renderTasksList();
+      this.tasksUser.handleRouteChange();
+    });
+
+    this.tasksUser.subscribe('changedTask', () => {
+      this.listUser.getOnceDataList();
+    });
   }
 }
 

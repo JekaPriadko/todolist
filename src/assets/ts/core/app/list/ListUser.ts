@@ -8,6 +8,8 @@ import {
   child,
 } from 'firebase/database';
 
+import EventEmitter from '../../EventEmitter';
+
 import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
 import { FilterTask } from '../filter/FilterTask';
@@ -16,7 +18,7 @@ import { List } from '../../../entity/list';
 
 import { getParamforUrl } from '../../../utils/updateUrl';
 
-class ListUser {
+class ListUser extends EventEmitter {
   private readonly db: Database;
 
   private userId: string | null;
@@ -32,6 +34,8 @@ class ListUser {
   private readonly listBlock: HTMLElement | null;
 
   constructor(userId: string) {
+    super();
+
     this.userId = userId;
     this.db = getDatabase();
 
@@ -42,8 +46,6 @@ class ListUser {
     this.filterTask = new FilterTask(this.listsData);
 
     this.listBlock = document.getElementById('lists-js');
-
-    this.setupListeners();
   }
 
   public async run() {
@@ -59,13 +61,7 @@ class ListUser {
     });
   }
 
-  private setupListeners() {
-    document.addEventListener('changedTask', async () => {
-      this.getOnceDataList();
-    });
-  }
-
-  private async getOnceDataList() {
+  public async getOnceDataList() {
     await get(child(ref(this.db), `${this.userId}/lists`))
       .then(async (snapshot) => {
         const dataFirebase = snapshot.val() || [];
@@ -139,7 +135,7 @@ class ListUser {
       this.filterTask.resetAllFilter();
     }
 
-    document.dispatchEvent(new Event('changedList'));
+    this.emit('changedList');
   }
 
   private renderLists(list: List): string {

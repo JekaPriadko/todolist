@@ -1,3 +1,5 @@
+import EventEmitter from '../../EventEmitter';
+
 import HTMLTasksUser from './HTMLTasksUser';
 import DataTasksUser from './DataTasksUser';
 
@@ -13,7 +15,7 @@ import {
   deleteParamFromUrl,
 } from '../../../utils/updateUrl';
 
-class TasksUser {
+class TasksUser extends EventEmitter {
   private readonly userId: string | null;
 
   private filter: FilterData;
@@ -35,6 +37,8 @@ class TasksUser {
   private formDetailsTask: HTMLElement | null;
 
   constructor(userId: string, listHandler: ListUser) {
+    super();
+
     this.userId = userId;
 
     this.listHandler = listHandler;
@@ -57,10 +61,6 @@ class TasksUser {
 
   private addEventListeners() {
     this.formCreateTask.addEventListener('submit', (e) => this.createTask(e));
-    document.addEventListener('changedList', async () => {
-      await this.renderTasksList();
-      this.handleRouteChange();
-    });
 
     document.addEventListener('changedFilter', async () => {
       await this.renderTasksList();
@@ -68,7 +68,7 @@ class TasksUser {
     });
   }
 
-  private async renderTasksList() {
+  public async renderTasksList() {
     this.filter = FilterTask.getActiveFilterFromUrl();
 
     const allItems = await this.dataTask.getAllItems(this.filter);
@@ -122,7 +122,7 @@ class TasksUser {
               trash: !oneItem.trash,
             };
             await this.dataTask.updateItem(newOneItem);
-            document.dispatchEvent(new Event('changedTask'));
+            this.emit('changedTask');
           }
           await this.renderTasksList();
         } else {
@@ -146,7 +146,7 @@ class TasksUser {
     });
   }
 
-  private handleRouteChange() {
+  public handleRouteChange() {
     const itemId = getParamforUrl('taskId');
     const oneItem: Task = this.dataTask.getOneItem(itemId);
 
@@ -256,14 +256,14 @@ class TasksUser {
     deleteParamFromUrl('taskId');
     await this.renderTasksList();
     this.handleRouteChange();
-    document.dispatchEvent(new Event('changedTask'));
+    this.emit('changedTask');
   }
 
   private async performTasksAdd(form: HTMLFormElement) {
     form.reset();
     await this.renderTasksList();
     document.dispatchEvent(new Event('resetMainForm'));
-    document.dispatchEvent(new Event('changedTask'));
+    this.emit('changedTask');
   }
 }
 

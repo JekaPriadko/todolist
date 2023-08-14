@@ -2,11 +2,13 @@ import { ref, set, update, Database } from 'firebase/database';
 
 import { uid } from 'uid';
 
+import EventEmitter from '../../EventEmitter';
+
 import { List } from '../../../entity/list';
 
 type PossibleModalStatus = 'update' | 'create';
 
-class ListUserModal {
+class ListUserModal extends EventEmitter {
   private readonly db: Database;
 
   private userId: string;
@@ -30,6 +32,8 @@ class ListUserModal {
   private updateListItemId: string | null;
 
   constructor(userId: string, db: Database, listsData: Array<List>) {
+    super();
+
     this.userId = userId;
     this.db = db;
     this.listsData = listsData;
@@ -139,7 +143,7 @@ class ListUserModal {
       await update(ref(this.db), updates);
     }
 
-    document.dispatchEvent(new Event('changedList'));
+    this.emit('changedList');
     this.closeModal();
   }
 }
