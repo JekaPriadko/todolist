@@ -1,6 +1,6 @@
 import { BaseTaskComponent } from './BaseTaskComponent';
 
-import ListUser from '../../core/list/ListUser';
+import ListUser from '../../core/app/list/ListUser';
 import { List } from '../../entity/list';
 
 class ListHandler extends BaseTaskComponent {

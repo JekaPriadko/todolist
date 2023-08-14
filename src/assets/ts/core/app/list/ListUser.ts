@@ -12,9 +12,9 @@ import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
 import { FilterTask } from '../filter/FilterTask';
 
-import { List } from '../../entity/list';
+import { List } from '../../../entity/list';
 
-import { getParamforUrl } from '../../utils/updateUrl';
+import { getParamforUrl } from '../../../utils/updateUrl';
 
 class ListUser {
   private readonly db: Database;

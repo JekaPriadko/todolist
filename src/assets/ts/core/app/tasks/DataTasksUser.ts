@@ -12,11 +12,11 @@ import {
   Query,
 } from 'firebase/firestore';
 
-import firebase from '../../firebase';
-import { Task } from '../../entity/task';
+import firebase from '../../../firebase';
+import { Task } from '../../../entity/task';
 import { FilterData } from '../filter/FilterTask';
 
-import generateDateFilter from '../../utils/generateDateFilter';
+import generateDateFilter from '../../../utils/generateDateFilter';
 
 class DataTasksUser {
   private readonly db: Firestore;

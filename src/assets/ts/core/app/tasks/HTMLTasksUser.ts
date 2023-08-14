@@ -1,7 +1,7 @@
-import { Task } from '../../entity/task';
-import { List } from '../../entity/list';
+import { Task } from '../../../entity/task';
+import { List } from '../../../entity/list';
 
-import formatDateToYYYYMMDD from '../../utils/formatDate';
+import formatDateToYYYYMMDD from '../../../utils/formatDate';
 
 /* eslint-disable */
 class HTMLTasksUser {

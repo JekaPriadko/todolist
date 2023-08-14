@@ -4,11 +4,11 @@ import {
   query,
   onSnapshot,
 } from 'firebase/firestore';
-import firebase from '../../firebase';
+import firebase from '../../../firebase';
 
-import { List } from '../../entity/list';
-import { setParamToUrl, getParamforUrl } from '../../utils/updateUrl';
-import { filterInfo, filterMapForCount } from '../../const/filter';
+import { List } from '../../../entity/list';
+import { setParamToUrl, getParamforUrl } from '../../../utils/updateUrl';
+import { filterInfo, filterMapForCount } from '../../../const/filter';
 
 type PossibleFilterStatus =
   | 'inbox'

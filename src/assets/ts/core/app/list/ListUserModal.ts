@@ -2,7 +2,7 @@ import { ref, set, update, Database } from 'firebase/database';
 
 import { uid } from 'uid';
 
-import { List } from '../../entity/list';
+import { List } from '../../../entity/list';
 
 type PossibleModalStatus = 'update' | 'create';
 

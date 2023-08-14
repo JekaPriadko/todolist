@@ -55,7 +55,7 @@ class AuthUser {
     return !!this.getUser();
   }
 
-  public getUser() {
+  public getUser(): User {
     return this.user;
   }
 

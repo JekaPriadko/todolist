@@ -3,7 +3,7 @@ import DataTasksUser from './DataTasksUser';
 
 import ListUser from '../list/ListUser';
 
-import { Task, Priority } from '../../entity/task';
+import { Task, Priority } from '../../../entity/task';
 
 import { FilterTask, FilterData } from '../filter/FilterTask';
 
@@ -11,7 +11,7 @@ import {
   setParamToUrl,
   getParamforUrl,
   deleteParamFromUrl,
-} from '../../utils/updateUrl';
+} from '../../../utils/updateUrl';
 
 class TasksUser {
   private readonly userId: string | null;
