@@ -1,7 +1,8 @@
 import AuthUser from './auth/AuthUser';
 
-import TasksUser from './app/tasks/TasksUser';
 import ListUser from './app/list/ListUser';
+// import TasksUser from './app/tasks/TasksUser';
+// import FilterTask from './app/filter/FilterTask';
 
 import ListHandler from '../components/task/List';
 import PriorityHandler from '../components/task/Priority';
@@ -10,38 +11,54 @@ import DueDate from '../components/task/DueDate';
 class TaskManager {
   private readonly userHandler: AuthUser;
 
-  private readonly tasksUser: TasksUser;
-
   private readonly listUser: ListUser;
+
+  // private readonly filterTask: FilterTask;
+
+  // private readonly tasksUser: TasksUser;
 
   constructor(userHandler: AuthUser) {
     this.userHandler = userHandler;
 
     this.listUser = new ListUser(this.userHandler.getUser().uid);
-    this.tasksUser = new TasksUser(
-      this.userHandler.getUser().uid,
-      this.listUser
-    );
+    // this.filterTask = new FilterTask(this.userHandler.getUser().uid);
+    // this.tasksUser = new TasksUser(
+    //   this.userHandler.getUser().uid,
+    //   this.listUser
+    // );
   }
 
   async initialize() {
     await this.listUser.run();
-    await this.tasksUser.run();
+    console.log(this.listUser.getOneLists('291e4c6619f'));
+    // await this.filterTask.run(this.listUser.listsData);
+    // await this.tasksUser.run(this.filterTask.getFilterFromUrl());
 
     new ListHandler(this.listUser).run();
     new PriorityHandler().run();
     new DueDate().run();
 
     // ================================================
-
-    this.listUser.subscribe('changedList', async () => {
-      await this.tasksUser.renderTasksList();
-      this.tasksUser.handleRouteChange();
+    // eslint-disable-next-line
+    this.listUser.subscribe('changedList', async (listsData) => {
+      // this.filterTask.updateListsData(listsData);
+      // await this.tasksUser.renderTasksList();
+      // this.tasksUser.handleRouteChange();
     });
 
-    this.tasksUser.subscribe('changedTask', () => {
-      this.listUser.getOnceDataList();
+    this.listUser.subscribe('needResetAllFilter', async () => {
+      // this.filterTask.resetAllFilter();
     });
+
+    // this.tasksUser.subscribe('changedTask', () => {
+    //   this.listUser.getOnceDataList();
+    // });
+
+    // this.filterTask.subscribe('changedFilter', async (newFilter) => {
+    //   this.tasksUser.updateFilter(newFilter);
+    //   await this.tasksUser.renderTasksList();
+    //   this.tasksUser.handleRouteChange();
+    // });
   }
 }
 

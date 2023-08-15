@@ -6,26 +6,18 @@ import {
 } from 'firebase/firestore';
 import firebase from '../../../firebase';
 
-import { List } from '../../../entity/list';
+import EventEmitter from '../../EventEmitter';
+
 import { setParamToUrl, getParamforUrl } from '../../../utils/updateUrl';
 import { filterInfo, filterMapForCount } from '../../../const/filter';
 
-type PossibleFilterStatus =
-  | 'inbox'
-  | 'today'
-  | 'tomorrow'
-  | 'week'
-  | 'completed'
-  | 'trash'
-  | 'listId';
+import { List } from '../../../entity/list';
+import { PossibleFilterStatus, FilterData } from '../../../entity/filter';
 
-export type FilterData = {
-  filter: PossibleFilterStatus;
-  listId?: string;
-};
+class FilterTask extends EventEmitter {
+  // private static instance: FilterTask;
 
-export class FilterTask {
-  private static instance: FilterTask;
+  private readonly userId: string | null;
 
   private listsData: Array<List>;
 
@@ -33,22 +25,48 @@ export class FilterTask {
 
   private pageTitle: HTMLElement;
 
-  public constructor(listsData: Array<List>) {
-    this.listsData = listsData;
+  public constructor(userId: string) {
+    super();
+
+    this.userId = userId;
+    this.listsData = [];
+
     this.filterBtnClass = '.make-filter-js';
     this.pageTitle = document.querySelector('.main-title-js');
+
+    this.listenChangesCountFilter();
+
+    document.addEventListener('click', (e) => this.handleFilterButtonClick(e));
   }
 
-  public static getInstance(listsData: Array<List>): FilterTask {
-    if (!FilterTask.instance) {
-      FilterTask.instance = new FilterTask(listsData);
-    }
-    return FilterTask.instance;
+  public listenChangesCountFilter(): void {
+    const db = getFirestore(firebase);
+
+    Object.keys(filterMapForCount).forEach((filterKey) => {
+      const filterConditions = filterMapForCount[filterKey];
+      const q = query(collection(db, this.userId), ...filterConditions);
+
+      onSnapshot(q, (querySnapshot) => {
+        const filterItem = document
+          .querySelector(`.make-filter-js[data-filter=${filterKey}]`)
+          .closest('.filter-item-js')
+          .querySelector('.filter-count-js') as HTMLElement;
+        filterItem.textContent = querySnapshot.size.toString();
+      });
+    });
   }
 
-  public init(): void {
+  // public static getInstance(): FilterTask {
+  //   if (!FilterTask.instance) {
+  //     FilterTask.instance = new FilterTask();
+  //   }
+  //   return FilterTask.instance;
+  // }
+
+  public run(listsData: Array<List>): void {
+    this.listsData = listsData;
+
     this.setupActiveFilterFromUrl();
-    this.addEventListeners();
   }
 
   public updateListsData(listsData: Array<List>): void {
@@ -59,10 +77,6 @@ export class FilterTask {
   public resetAllFilter(): void {
     setParamToUrl({ filter: 'inbox' });
     this.setFilteredData({ filter: 'inbox' });
-  }
-
-  private addEventListeners(): void {
-    document.addEventListener('click', this.handleFilterButtonClick.bind(this));
   }
 
   private handleFilterButtonClick(e: Event): void {
@@ -100,29 +114,12 @@ export class FilterTask {
     }
   }
 
-  public static listenChangesCountFilter(user: string): void {
-    const db = getFirestore(firebase);
-
-    Object.keys(filterMapForCount).forEach((filterKey) => {
-      const filterConditions = filterMapForCount[filterKey];
-      const q = query(collection(db, user), ...filterConditions);
-
-      onSnapshot(q, (querySnapshot) => {
-        const filterItem = document
-          .querySelector(`.make-filter-js[data-filter=${filterKey}]`)
-          .closest('.filter-item-js')
-          .querySelector('.filter-count-js') as HTMLElement;
-        filterItem.textContent = querySnapshot.size.toString();
-      });
-    });
-  }
-
   private setupActiveFilterFromUrl(): void {
-    const filter = FilterTask.getActiveFilterFromUrl();
+    const filter = this.getFilterFromUrl();
     this.setFilteredData(filter);
   }
 
-  public static getActiveFilterFromUrl(): FilterData {
+  public getFilterFromUrl(): FilterData {
     return {
       filter: (getParamforUrl('filter') as PossibleFilterStatus) || 'inbox',
       listId: getParamforUrl('listId'),
@@ -172,6 +169,7 @@ export class FilterTask {
     this.setActiveFilterBtn(inboxFilterBtn);
     this.pageTitle.textContent = newTitle;
 
-    document.dispatchEvent(new Event('changedFilter'));
+    this.emit('changedFilter', this.getFilterFromUrl());
   }
 }
+export default FilterTask;

@@ -7,7 +7,7 @@ import ListUser from '../list/ListUser';
 
 import { Task, Priority } from '../../../entity/task';
 
-import { FilterTask, FilterData } from '../filter/FilterTask';
+import { FilterData } from '../../../entity/filter';
 
 import {
   setParamToUrl,
@@ -18,7 +18,7 @@ import {
 class TasksUser extends EventEmitter {
   private readonly userId: string | null;
 
-  private filter: FilterData;
+  private filter: FilterData | null;
 
   private readonly dataTask: DataTasksUser;
 
@@ -42,6 +42,7 @@ class TasksUser extends EventEmitter {
     this.userId = userId;
 
     this.listHandler = listHandler;
+    this.filter = null;
 
     this.dataTask = new DataTasksUser(this.userId);
 
@@ -51,27 +52,24 @@ class TasksUser extends EventEmitter {
     this.taskDetails = document.getElementById('details');
   }
 
-  public async run() {
+  public async run(filter: FilterData) {
+    this.filter = filter;
     await this.renderTasksList();
     this.handleRouteChange();
     this.addEventListeners();
+  }
 
-    FilterTask.listenChangesCountFilter(this.userId);
+  public updateFilter(filter: FilterData): void {
+    this.filter = filter;
   }
 
   private addEventListeners() {
     this.formCreateTask.addEventListener('submit', (e) => this.createTask(e));
-
-    document.addEventListener('changedFilter', async () => {
-      await this.renderTasksList();
-      this.handleRouteChange();
-    });
   }
 
   public async renderTasksList() {
-    this.filter = FilterTask.getActiveFilterFromUrl();
-
     const allItems = await this.dataTask.getAllItems(this.filter);
+
     if (allItems.length <= 0) {
       this.tasksList.innerHTML = HTMLTasksUser.getEmptyHtmlBlockTask();
       return;

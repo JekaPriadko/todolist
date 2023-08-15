@@ -12,7 +12,6 @@ import EventEmitter from '../../EventEmitter';
 
 import ListUserModal from './ListUserModal';
 import DataTasksUser from '../tasks/DataTasksUser';
-import { FilterTask } from '../filter/FilterTask';
 
 import { List } from '../../../entity/list';
 
@@ -23,11 +22,9 @@ class ListUser extends EventEmitter {
 
   private userId: string | null;
 
-  private listsData: Array<List> = [];
+  public listsData: Array<List> = [];
 
   private readonly dataTask: DataTasksUser;
-
-  private readonly filterTask: FilterTask;
 
   private readonly modalAddList: ListUserModal;
 
@@ -43,8 +40,6 @@ class ListUser extends EventEmitter {
 
     this.modalAddList = new ListUserModal(this.userId, this.db, this.listsData);
 
-    this.filterTask = new FilterTask(this.listsData);
-
     this.listBlock = document.getElementById('lists-js');
   }
 
@@ -52,7 +47,6 @@ class ListUser extends EventEmitter {
     const starCountRef = ref(this.db, `${this.userId}/lists`);
 
     await this.getOnceDataList();
-    this.filterTask.init();
 
     onValue(starCountRef, (snapshot) => {
       const dataFirebase = snapshot.val() || [];
@@ -89,7 +83,7 @@ class ListUser extends EventEmitter {
     this.handleClickListItem();
 
     this.modalAddList.updateListsData(this.listsData);
-    this.filterTask.updateListsData(this.listsData);
+    this.emit('changedList', this.listsData);
   }
 
   private handleClickListItem() {
@@ -132,10 +126,10 @@ class ListUser extends EventEmitter {
     );
 
     if (getParamforUrl('listId') === listId) {
-      this.filterTask.resetAllFilter();
+      this.emit('needResetAllFilter', this.listsData);
     }
 
-    this.emit('changedList');
+    this.emit('changedList', this.listsData);
   }
 
   private renderLists(list: List): string {
@@ -170,13 +164,22 @@ class ListUser extends EventEmitter {
     /* eslint-enable */
   }
 
-  public static getLists(listUserInstance: ListUser): Array<List> {
-    return listUserInstance.listsData;
+  // public static getLists(listUserInstance: ListUser): Array<List> {
+  //   return listUserInstance.listsData;
+  // }
+
+  public getLists(): Array<List> {
+    return this.listsData;
   }
 
-  public static getOneLists(listUserInstance: ListUser, listId: string): List {
+  // public static getOneLists(listUserInstance: ListUser, listId: string): List {
+  //   return (
+  //     listUserInstance.listsData.find((item) => item.id === listId) || null
+  //   );
+  // }
+  public getOneLists(listId: string): List {
     return (
-      listUserInstance.listsData.find((item) => item.id === listId) || null
+      this.listsData.find((item) => item.id === listId) || null
     );
   }
 }
