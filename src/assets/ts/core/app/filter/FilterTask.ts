@@ -14,9 +14,9 @@ import { filterInfo, filterMapForCount } from '../../../const/filter';
 import { List } from '../../../entity/list';
 import { PossibleFilterStatus, FilterData } from '../../../entity/filter';
 
-class FilterTask extends EventEmitter {
-  // private static instance: FilterTask;
+const DEFAULT_FILTER = 'inbox';
 
+class FilterTask extends EventEmitter {
   private readonly userId: string | null;
 
   private listsData: Array<List>;
@@ -30,13 +30,14 @@ class FilterTask extends EventEmitter {
 
     this.userId = userId;
     this.listsData = [];
-
     this.filterBtnClass = '.make-filter-js';
     this.pageTitle = document.querySelector('.main-title-js');
+    this.initialize();
+  }
 
+  private initialize(): void {
     this.listenChangesCountFilter();
-
-    document.addEventListener('click', (e) => this.handleFilterButtonClick(e));
+    this.setupEventListeners();
   }
 
   public listenChangesCountFilter(): void {
@@ -47,21 +48,22 @@ class FilterTask extends EventEmitter {
       const q = query(collection(db, this.userId), ...filterConditions);
 
       onSnapshot(q, (querySnapshot) => {
-        const filterItem = document
-          .querySelector(`.make-filter-js[data-filter=${filterKey}]`)
-          .closest('.filter-item-js')
-          .querySelector('.filter-count-js') as HTMLElement;
-        filterItem.textContent = querySnapshot.size.toString();
+        this.updateFilterCount(filterKey, querySnapshot.size);
       });
     });
   }
 
-  // public static getInstance(): FilterTask {
-  //   if (!FilterTask.instance) {
-  //     FilterTask.instance = new FilterTask();
-  //   }
-  //   return FilterTask.instance;
-  // }
+  private updateFilterCount(filterKey: string, count: number): void {
+    const filterItem = document
+      .querySelector(`.make-filter-js[data-filter=${filterKey}]`)
+      ?.closest('.filter-item-js')
+      ?.querySelector('.filter-count-js') as HTMLElement;
+    filterItem.textContent = count.toString();
+  }
+
+  private setupEventListeners(): void {
+    document.addEventListener('click', (e) => this.handleFilterButtonClick(e));
+  }
 
   public run(listsData: Array<List>): void {
     this.listsData = listsData;
@@ -75,43 +77,31 @@ class FilterTask extends EventEmitter {
   }
 
   public resetAllFilter(): void {
-    setParamToUrl({ filter: 'inbox' });
-    this.setFilteredData({ filter: 'inbox' });
+    setParamToUrl({ filter: DEFAULT_FILTER });
+    this.setFilteredData({ filter: DEFAULT_FILTER });
   }
 
   private handleFilterButtonClick(e: Event): void {
     const targetElement = e.target as HTMLElement;
+    const filterBtn = targetElement.closest(this.filterBtnClass) as HTMLElement;
 
-    if (targetElement.closest(this.filterBtnClass)) {
-      const filterBtn = targetElement.closest(
-        this.filterBtnClass
-      ) as HTMLElement;
-
-      if (filterBtn.classList.contains('active')) return;
-
-      this.clearAllActiveFilterBtn();
-      this.setActiveFilterBtn(filterBtn);
-
-      const statusFilter = filterBtn.getAttribute(
-        'data-filter'
-      ) as PossibleFilterStatus;
-
-      const filter: FilterData = {
-        filter: statusFilter,
-      };
-
-      if (statusFilter === 'listId') {
-        const listId = filterBtn
-          .closest('.list-item-js')
-          .getAttribute('data-id');
-        if (listId) {
-          filter.listId = listId;
-        }
-      }
-
-      setParamToUrl(filter);
-      this.setFilteredData(filter);
+    if (!filterBtn || filterBtn.classList.contains('active')) {
+      return;
     }
+
+    const statusFilter = filterBtn.getAttribute(
+      'data-filter'
+    ) as PossibleFilterStatus;
+    const filter: FilterData = {
+      filter: statusFilter,
+      listId:
+        statusFilter === 'listId'
+          ? filterBtn.closest('.list-item-js')?.getAttribute('data-id')
+          : undefined,
+    };
+
+    setParamToUrl(filter);
+    this.setFilteredData(filter);
   }
 
   private setupActiveFilterFromUrl(): void {
@@ -121,13 +111,10 @@ class FilterTask extends EventEmitter {
 
   public getFilterFromUrl(): FilterData {
     return {
-      filter: (getParamforUrl('filter') as PossibleFilterStatus) || 'inbox',
+      filter:
+        (getParamforUrl('filter') as PossibleFilterStatus) || DEFAULT_FILTER,
       listId: getParamforUrl('listId'),
     };
-  }
-
-  private setActiveFilterBtn(btn: HTMLElement): void {
-    btn.classList.add('active');
   }
 
   private clearAllActiveFilterBtn(): void {
@@ -145,30 +132,29 @@ class FilterTask extends EventEmitter {
     this.clearAllActiveFilterBtn();
 
     let newTitle: string;
-    let inboxFilterBtn: HTMLElement;
+    let filterBtn: HTMLElement | null;
 
     if (typeFilter !== 'listId') {
       newTitle = filterInfo[typeFilter].title;
-      inboxFilterBtn = document.querySelector(
+      filterBtn = document.querySelector(
         `.make-filter-js[data-filter="${typeFilter}"]`
-      ) as HTMLElement;
+      );
     } else {
       const { listId } = filter;
-      inboxFilterBtn = document.querySelector(
+      filterBtn = document.querySelector(
         `.list-item-js[data-id="${listId}"] .make-filter-js`
-      ) as HTMLElement;
-      newTitle = this.listsData.find((item) => item.id === listId)?.title;
+      );
+      newTitle = this.listsData.find((item) => item.id === listId)?.title || '';
     }
 
-    if (!inboxFilterBtn) {
-      setParamToUrl({ filter: 'inbox' });
-      this.setFilteredData({ filter: 'inbox' });
+    if (!filterBtn) {
+      setParamToUrl({ filter: DEFAULT_FILTER });
+      this.setFilteredData({ filter: DEFAULT_FILTER });
       return;
     }
 
-    this.setActiveFilterBtn(inboxFilterBtn);
+    filterBtn.classList.add('active');
     this.pageTitle.textContent = newTitle;
-
     this.emit('changedFilter', this.getFilterFromUrl());
   }
 }

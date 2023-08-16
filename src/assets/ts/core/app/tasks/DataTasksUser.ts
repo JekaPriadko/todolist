@@ -56,11 +56,9 @@ class DataTasksUser {
       };
     });
 
-    return this.allItems.sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return dateB.getTime() - dateA.getTime();
-    });
+    return this.allItems.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
   }
 
   private prepareQuery(filterData: FilterData): Query | null {
@@ -70,22 +68,14 @@ class DataTasksUser {
       completed: [where('completed', '==', true), where('trash', '==', false)],
       trash: [where('trash', '==', true)],
       listId: [where('list', '==', filterData.listId)],
-      today: generateDateFilter(new Date(), 0, 1),
-      tomorrow: generateDateFilter(new Date(), 1, 1),
-      week: generateDateFilter(new Date(), 0, 7),
+      today: [...generateDateFilter(new Date(), 0, 1)],
+      tomorrow: [...generateDateFilter(new Date(), 1, 1)],
+      week: [...generateDateFilter(new Date(), 0, 7)],
     };
 
     const filters = filterMap[filterData.filter];
 
-    if (!filters) {
-      return null;
-    }
-
-    return query(baseQuery, ...filters);
-  }
-
-  public getCountAllItems(): number {
-    return this.allItems.length;
+    return filters ? query(baseQuery, ...filters) : null;
   }
 
   public getOneItem(id: string): Task {

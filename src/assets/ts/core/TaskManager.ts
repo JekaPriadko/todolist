@@ -1,8 +1,8 @@
 import AuthUser from './auth/AuthUser';
 
 import ListUser from './app/list/ListUser';
-// import TasksUser from './app/tasks/TasksUser';
-// import FilterTask from './app/filter/FilterTask';
+import FilterTask from './app/filter/FilterTask';
+import TasksUser from './app/tasks/TasksUser';
 
 import ListHandler from '../components/task/List';
 import PriorityHandler from '../components/task/Priority';
@@ -13,52 +13,60 @@ class TaskManager {
 
   private readonly listUser: ListUser;
 
-  // private readonly filterTask: FilterTask;
+  private readonly filterTask: FilterTask;
 
-  // private readonly tasksUser: TasksUser;
+  private readonly tasksUser: TasksUser;
+
+  private readonly listComponent: ListHandler;
+
+  private readonly priorityComponent: PriorityHandler;
+
+  private readonly DateComponent: DueDate;
 
   constructor(userHandler: AuthUser) {
     this.userHandler = userHandler;
+    const userId = this.userHandler.getUser().uid;
 
-    this.listUser = new ListUser(this.userHandler.getUser().uid);
-    // this.filterTask = new FilterTask(this.userHandler.getUser().uid);
-    // this.tasksUser = new TasksUser(
-    //   this.userHandler.getUser().uid,
-    //   this.listUser
-    // );
+    this.listUser = new ListUser(userId);
+    this.filterTask = new FilterTask(userId);
+    this.tasksUser = new TasksUser(userId);
+
+    this.listComponent = new ListHandler();
+    this.priorityComponent = new PriorityHandler();
+    this.DateComponent = new DueDate();
   }
 
   async initialize() {
     await this.listUser.run();
-    console.log(this.listUser.getOneLists('291e4c6619f'));
-    // await this.filterTask.run(this.listUser.listsData);
-    // await this.tasksUser.run(this.filterTask.getFilterFromUrl());
+    const userList = this.listUser.getLists();
 
-    new ListHandler(this.listUser).run();
-    new PriorityHandler().run();
-    new DueDate().run();
+    this.filterTask.run(userList);
+
+    await this.tasksUser.run(this.filterTask.getFilterFromUrl(), userList);
+
+    this.listComponent.run();
+    this.priorityComponent.run();
+    this.DateComponent.run();
 
     // ================================================
-    // eslint-disable-next-line
     this.listUser.subscribe('changedList', async (listsData) => {
-      // this.filterTask.updateListsData(listsData);
-      // await this.tasksUser.renderTasksList();
-      // this.tasksUser.handleRouteChange();
+      this.listComponent.updateListData(listsData);
+      this.filterTask.updateListsData(listsData);
+      await this.tasksUser.updateListsData(listsData);
     });
 
     this.listUser.subscribe('needResetAllFilter', async () => {
-      // this.filterTask.resetAllFilter();
+      this.filterTask.resetAllFilter();
     });
 
-    // this.tasksUser.subscribe('changedTask', () => {
-    //   this.listUser.getOnceDataList();
-    // });
+    // eslint-disable-next-line
+    this.filterTask.subscribe('changedFilter', async (newFilter) => {
+      await this.tasksUser.updateFilter(newFilter);
+    });
 
-    // this.filterTask.subscribe('changedFilter', async (newFilter) => {
-    //   this.tasksUser.updateFilter(newFilter);
-    //   await this.tasksUser.renderTasksList();
-    //   this.tasksUser.handleRouteChange();
-    // });
+    this.tasksUser.subscribe('changedTask', () => {
+      this.listUser.getOnceDataList();
+    });
   }
 }
 

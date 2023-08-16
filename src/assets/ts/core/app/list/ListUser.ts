@@ -56,25 +56,23 @@ class ListUser extends EventEmitter {
   }
 
   public async getOnceDataList() {
-    await get(child(ref(this.db), `${this.userId}/lists`))
-      .then(async (snapshot) => {
-        const dataFirebase = snapshot.val() || [];
-        await this.prepareDataList(dataFirebase);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      const snapshot = await get(child(ref(this.db), `${this.userId}/lists`));
+      const dataFirebase = snapshot.val() || [];
+      await this.prepareDataList(dataFirebase);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private async prepareDataList(dataFirebase: List[]) {
-    this.listsData = dataFirebase;
+    this.listsData = await Promise.all(
+      dataFirebase.map(async (list) => ({
+        ...list,
+        count: await this.dataTask.getTasksByList(list.id),
+      }))
+    );
 
-    const promises = this.listsData.map(async (list) => ({
-      ...list,
-      count: await this.dataTask.getTasksByList(list.id),
-    }));
-
-    this.listsData = await Promise.all(promises);
     const htmlList = this.listsData
       .map((list) => this.renderLists(list))
       .join('');
@@ -87,10 +85,9 @@ class ListUser extends EventEmitter {
   }
 
   private handleClickListItem() {
-    const listItems: NodeListOf<HTMLElement> | null =
-      this.listBlock.querySelectorAll('.list-item-js');
+    const listItems = this.listBlock?.querySelectorAll('.list-item-js');
 
-    listItems.forEach((item: Element) => {
+    listItems?.forEach((item: Element) => {
       item.addEventListener('click', async (e) => {
         const targetElement = e.target as HTMLElement;
         const listId = item.getAttribute('data-id');
@@ -112,24 +109,30 @@ class ListUser extends EventEmitter {
   }
 
   private editListItem(listId: string) {
-    this.modalAddList.setStatusModal('update');
-    this.modalAddList.setupDataModal(
-      this.listsData.find((elem) => elem.id === listId)
-    );
-    this.modalAddList.showAddModal();
+    const listToUpdate = this.listsData.find((elem) => elem.id === listId);
+    if (listToUpdate) {
+      this.modalAddList.setStatusModal('update');
+      this.modalAddList.setupDataModal(listToUpdate);
+      this.modalAddList.showAddModal();
+    }
   }
 
   private async deleteListItem(listId: string) {
-    await set(
-      ref(this.db, `${this.userId}/lists`),
-      this.listsData.filter((item) => item !== null && item.id !== listId)
+    const newListsData = this.listsData.filter(
+      (item) => item !== null && item.id !== listId
     );
 
-    if (getParamforUrl('listId') === listId) {
-      this.emit('needResetAllFilter', this.listsData);
-    }
+    try {
+      await set(ref(this.db, `${this.userId}/lists`), newListsData);
 
-    this.emit('changedList', this.listsData);
+      if (getParamforUrl('listId') === listId) {
+        this.emit('needResetAllFilter', this.listsData);
+      }
+
+      this.emit('changedList', newListsData);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private renderLists(list: List): string {
@@ -164,23 +167,8 @@ class ListUser extends EventEmitter {
     /* eslint-enable */
   }
 
-  // public static getLists(listUserInstance: ListUser): Array<List> {
-  //   return listUserInstance.listsData;
-  // }
-
   public getLists(): Array<List> {
     return this.listsData;
-  }
-
-  // public static getOneLists(listUserInstance: ListUser, listId: string): List {
-  //   return (
-  //     listUserInstance.listsData.find((item) => item.id === listId) || null
-  //   );
-  // }
-  public getOneLists(listId: string): List {
-    return (
-      this.listsData.find((item) => item.id === listId) || null
-    );
   }
 }
 

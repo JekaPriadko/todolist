@@ -3,10 +3,8 @@ import EventEmitter from '../../EventEmitter';
 import HTMLTasksUser from './HTMLTasksUser';
 import DataTasksUser from './DataTasksUser';
 
-import ListUser from '../list/ListUser';
-
 import { Task, Priority } from '../../../entity/task';
-
+import { List } from '../../../entity/list';
 import { FilterData } from '../../../entity/filter';
 
 import {
@@ -20,13 +18,13 @@ class TasksUser extends EventEmitter {
 
   private filter: FilterData | null;
 
+  private list: Array<List>;
+
   private readonly dataTask: DataTasksUser;
 
   private readonly tasksList: HTMLElement | null;
 
   private taskItems: NodeListOf<HTMLElement> | null;
-
-  private listHandler: ListUser;
 
   private taskDetails: HTMLElement | null;
 
@@ -36,13 +34,13 @@ class TasksUser extends EventEmitter {
 
   private formDetailsTask: HTMLElement | null;
 
-  constructor(userId: string, listHandler: ListUser) {
+  constructor(userId: string) {
     super();
 
     this.userId = userId;
 
-    this.listHandler = listHandler;
     this.filter = null;
+    this.list = null;
 
     this.dataTask = new DataTasksUser(this.userId);
 
@@ -50,17 +48,28 @@ class TasksUser extends EventEmitter {
     this.formCreateTask = document.getElementById('create-task-js');
     this.taskDetailsWrap = document.getElementById('details-wrap-js');
     this.taskDetails = document.getElementById('details');
-  }
 
-  public async run(filter: FilterData) {
-    this.filter = filter;
-    await this.renderTasksList();
-    this.handleRouteChange();
     this.addEventListeners();
   }
 
-  public updateFilter(filter: FilterData): void {
+  public async run(filter: FilterData, list: Array<List>) {
     this.filter = filter;
+    this.list = list;
+
+    await this.renderTasksList();
+    this.handleRouteChange();
+  }
+
+  public async updateFilter(filter: FilterData): Promise<void> {
+    this.filter = filter;
+    await this.renderTasksList();
+    this.handleRouteChange();
+  }
+
+  public async updateListsData(list: Array<List>): Promise<void> {
+    this.list = list;
+    await this.renderTasksList();
+    this.handleRouteChange();
   }
 
   private addEventListeners() {
@@ -79,7 +88,7 @@ class TasksUser extends EventEmitter {
       .map((task) =>
         HTMLTasksUser.getHtmlListTask(
           task,
-          ListUser.getOneLists(this.listHandler, task.list)
+          this.list.find((item) => item.id === task.list) || null
         )
       )
       .join('');
@@ -89,53 +98,66 @@ class TasksUser extends EventEmitter {
     this.handleClickTask();
   }
 
-  private handleClickTask() {
+  handleClickTask() {
     this.taskItems = document.querySelectorAll('.task-item-js');
 
-    this.taskItems.forEach((item: Element) => {
-      item.addEventListener('click', async (e) => {
-        const targetElement = e.target as HTMLElement;
-
-        const itemId = item.getAttribute('data-id');
-        const isActionButton = targetElement.closest('.action-btn-js');
-        if (isActionButton) {
-          const oneItem: Task = this.dataTask.getOneItem(itemId);
-
-          const isCheckbox =
-            isActionButton.classList.contains('checkbox-task-js');
-          const isDelete = isActionButton.classList.contains('delete-task-js');
-
-          if (isCheckbox) {
-            const newOneItem: Task = {
-              ...oneItem,
-              completed: !oneItem.completed,
-            };
-
-            await this.dataTask.updateItem(newOneItem);
-          }
-
-          if (isDelete) {
-            const newOneItem: Task = {
-              ...oneItem,
-              trash: !oneItem.trash,
-            };
-            await this.dataTask.updateItem(newOneItem);
-            this.emit('changedTask');
-          }
-          await this.renderTasksList();
-        } else {
-          const taskItem = targetElement.closest('.task-item-js');
-          if (taskItem.classList.contains('active')) return;
-
-          this.clearActiveTasks();
-          setParamToUrl({ taskId: itemId });
-
-          this.taskDetails.classList.add('active');
-        }
-
-        this.handleRouteChange();
-      });
+    this.taskItems.forEach((item) => {
+      item.addEventListener('click', (e) => this.handleTaskClick(e));
     });
+  }
+
+  async handleTaskClick(e: Event) {
+    const targetElement = e.target as HTMLElement;
+    const item = targetElement.closest('.task-item-js');
+    const itemId = item.getAttribute('data-id');
+    const isActionButton = targetElement.closest(
+      '.action-btn-js'
+    ) as HTMLElement;
+
+    if (isActionButton) {
+      await this.handleActionButtonClick(itemId, isActionButton);
+    } else {
+      await this.handleTaskItemClick(itemId);
+    }
+
+    this.handleRouteChange();
+  }
+
+  async handleActionButtonClick(itemId: string, targetElement: HTMLElement) {
+    const oneItem = this.dataTask.getOneItem(itemId);
+    const isCheckbox = targetElement.classList.contains('checkbox-task-js');
+    const isDelete = targetElement.classList.contains('delete-task-js');
+
+    if (isCheckbox) {
+      const newOneItem = {
+        ...oneItem,
+        completed: !oneItem.completed,
+      };
+      await this.dataTask.updateItem(newOneItem);
+    }
+
+    if (isDelete) {
+      const newOneItem = {
+        ...oneItem,
+        trash: !oneItem.trash,
+      };
+      await this.dataTask.updateItem(newOneItem);
+      this.emit('changedTask');
+    }
+
+    await this.renderTasksList();
+  }
+
+  async handleTaskItemClick(itemId: string) {
+    const taskItem = document.querySelector(
+      `.task-item-js[data-id="${itemId}"]`
+    );
+    if (taskItem.classList.contains('active')) return;
+
+    this.clearActiveTasks();
+    setParamToUrl({ taskId: itemId });
+
+    this.taskDetails.classList.add('active');
   }
 
   private clearActiveTasks() {
@@ -155,12 +177,14 @@ class TasksUser extends EventEmitter {
     this.setActiveClassForTask();
 
     /* eslint-disable */
-    this.taskDetailsWrap.innerHTML = oneItem
+    const detailsHtml = oneItem
       ? HTMLTasksUser.getHtmlDetails(
           oneItem,
-          ListUser.getOneLists(this.listHandler, oneItem.list)
+          this.list.find((item) => item.id === oneItem.list) || null
         )
       : HTMLTasksUser.getHtmlEmptyDetails();
+
+    this.taskDetailsWrap.innerHTML = detailsHtml;
     /* eslint-enable */
 
     this.handleDetailsClick();

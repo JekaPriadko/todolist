@@ -1,10 +1,9 @@
 import { BaseTaskComponent } from './BaseTaskComponent';
 
-import ListUser from '../../core/app/list/ListUser';
 import { List } from '../../entity/list';
 
 class ListHandler extends BaseTaskComponent {
-  private listHandler: ListUser;
+  private lists: Array<List>;
 
   private blockSetBtn: string;
 
@@ -12,10 +11,8 @@ class ListHandler extends BaseTaskComponent {
 
   private blockRenderListPlace: string;
 
-  constructor(listHandler: ListUser) {
+  constructor() {
     super();
-
-    this.listHandler = listHandler;
 
     this.block = '.move-list-js';
     this.blockSetBtn = '.move-list-set-js';
@@ -25,6 +22,10 @@ class ListHandler extends BaseTaskComponent {
 
   public run(): void {
     this.initListeners();
+  }
+
+  public updateListData(lists: Array<List>): void {
+    this.lists = lists;
   }
 
   private initListeners() {
@@ -37,8 +38,7 @@ class ListHandler extends BaseTaskComponent {
         const listWrap = listBlock.querySelector(
           this.blockRenderListPlace
         ) as HTMLElement;
-        const listData = ListUser.getLists(this.listHandler);
-        this.renderLists(listWrap, listData);
+        this.renderLists(listWrap, this.lists);
 
         this.hideAllDropdown();
         listBlock.classList.add('active');
@@ -47,7 +47,8 @@ class ListHandler extends BaseTaskComponent {
           const listId = targetElement
             .closest(this.blockSetBtn)
             .getAttribute('data-list');
-          const newValue = listData.find((item) => item.id === listId) || null;
+          const newValue =
+            this.lists.find((item: List) => item.id === listId) || null;
           this.setBlock(listBlock, newValue);
         }
       } else {

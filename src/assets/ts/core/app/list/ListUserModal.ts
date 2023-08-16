@@ -67,7 +67,7 @@ class ListUserModal extends EventEmitter {
   private handleModalShow() {
     const showListBtn = document.getElementById('show-modal-list');
 
-    showListBtn.addEventListener('click', async () => {
+    showListBtn.addEventListener('click', () => {
       this.statusModal = 'create';
       this.setupDataModal();
       this.showAddModal();
@@ -92,13 +92,13 @@ class ListUserModal extends EventEmitter {
   }
 
   public showAddModal() {
-    this.modal.classList.add('active');
+    this.modal?.classList.add('active');
   }
 
   public closeModal() {
     if (this.isActiveInputColor) return;
 
-    this.modal.classList.remove('active');
+    this.modal?.classList.remove('active');
   }
 
   public setupDataModal(list?: List) {
